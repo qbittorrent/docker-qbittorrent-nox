@@ -1,0 +1,51 @@
+name: CI
+
+on: [pull_request, push]
+
+permissions: {}
+
+env:
+  QBT_VERSION: "devel"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: ${{ github.head_ref != '' }}
+
+jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          build-args: |
+            QBT_VERSION=${{ env.QBT_VERSION }}
+          outputs: type=docker,dest=./qBittorrent-docker-x64-${{ env.QBT_VERSION }}
+          labels: |
+            org.opencontainers.image.description=An advanced BitTorrent client programmed in C++, based on Qt toolkit and libtorrent-rasterbar
+            org.opencontainers.image.documentation=https://github.com/qbittorrent/docker-qbittorrent-nox
+            org.opencontainers.image.licenses=GPL-3.0+
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.source=https://github.com/qbittorrent/docker-qbittorrent-nox
+            org.opencontainers.image.title=qbittorrent-nox docker image
+            org.opencontainers.image.url=https://github.com/qbittorrent/docker-qbittorrent-nox
+            org.opencontainers.image.vendor=qBittorrent
+            org.opencontainers.image.version=master
+
+      # To run the image locally:
+      # 1. `docker load < artifact`
+      # 2. remove `build` field and replace `image` field with the imported image in docker-compose.yml
+      # 3. `docker compose up`
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: qBittorrent-docker-x64-${{ env.QBT_VERSION }}
+          path: qBittorrent-docker-x64-${{ env.QBT_VERSION }}
