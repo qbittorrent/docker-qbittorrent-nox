@@ -1,6 +1,6 @@
 # qBittorrent-nox Docker Image [![GitHub Actions CI Status](https://github.com/qbittorrent/docker-qbittorrent-nox/actions/workflows/release.yaml/badge.svg)](https://github.com/qbittorrent/docker-qbittorrent-nox/actions)
 
-Repository on Docker Hub: https://hub.docker.com/repository/docker/qbittorrentofficial/qbittorrent-nox \
+Repository on Docker Hub: https://hub.docker.com/r/qbittorrentofficial/qbittorrent-nox \
 Repository on GitHub: https://github.com/qbittorrent/docker-qbittorrent-nox
 
 ## Supported architectures
@@ -49,7 +49,7 @@ https://github.com/qbittorrent/qBittorrent/issues
       the EULA [here](https://github.com/qbittorrent/qBittorrent/blob/56667e717b82c79433ecb8a5ff6cc2d7b315d773/src/app/main.cpp#L320-L323).
     * `QBT_VERSION` \
       This environment variable specifies the version of qBittorrent-nox to use. \
-      For example, `4.4.5-1` is a valid entry. You can find all tagged versions [here](https://hub.docker.com/repository/docker/qbittorrentofficial/qbittorrent-nox/tags?page=1&ordering=last_updated). \
+      For example, `4.4.5-1` is a valid entry. You can find all tagged versions [here](https://hub.docker.com/r/qbittorrentofficial/qbittorrent-nox/tags). \
       Or you can put `latest` to use the latest stable release of qBittorrent.
     * `QBT_WEBUI_PORT` \
       This environment variable sets the port number which qBittorrent WebUI will be binded to.
