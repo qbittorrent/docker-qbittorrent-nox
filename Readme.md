@@ -66,7 +66,7 @@ https://github.com/qbittorrent/qBittorrent/issues
 
 3. Running the image
 
-    * If using Docker (not Docker Compose), edit the variables run:
+    * If using Docker (not Docker Compose), edit the variables and run:
       ```shell
       export \
         QBT_EULA=<put_accept_here> \
