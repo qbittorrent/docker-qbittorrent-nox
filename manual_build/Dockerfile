@@ -30,8 +30,7 @@ RUN \
     -G Ninja \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DGUI=OFF \
-    -DQT6=ON \
-    -DSTACKTRACE=OFF && \
+    -DQT6=ON && \
   cmake --build build && \
   cmake --install build
 
