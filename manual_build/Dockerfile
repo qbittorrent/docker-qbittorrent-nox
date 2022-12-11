@@ -5,6 +5,13 @@ ARG QBT_VERSION
 
 # alpine linux qbittorrent package: https://git.alpinelinux.org/aports/tree/community/qbittorrent/APKBUILD
 
+# Check environment variables
+RUN \
+  if [ -z "$QBT_VERSION" ]; then \
+    echo 'Missing $QBT_VERSION variable. Check your command line arguments.' && \
+    exit 1 ; \
+  fi
+
 RUN \
   apk --update-cache add \
     boost-dev \
