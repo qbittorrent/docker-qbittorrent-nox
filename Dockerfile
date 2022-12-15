@@ -40,7 +40,7 @@ RUN \
     -DCMAKE_EXE_LINKER_FLAGS="-flto=auto" \
     -DGUI=OFF \
     -DQT6=ON && \
-  cmake --build build && \
+  cmake --build build -j $(nproc) && \
   cmake --install build
 
 # image for running
