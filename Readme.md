@@ -89,6 +89,7 @@ https://github.com/qbittorrent/qBittorrent/issues
         -v "$QBT_DOWNLOADS_PATH":/downloads \
         qbittorrentofficial/qbittorrent-nox:${QBT_VERSION}
       ```
+      Alternatively, you can use `ghcr.io/qbittorrent/docker-qbittorrent-nox:${QBT_VERSION}` for the image path.
 
     * If using Docker Compose:
       ```shell
