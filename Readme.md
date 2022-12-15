@@ -97,7 +97,8 @@ https://github.com/qbittorrent/qBittorrent/issues
       ```
 
     * Then you can login to qBittorrent-nox at: `http://127.0.0.1:8080` \
-      Don't forget to change the default login password to something else! \
+      The default username/password is: `admin/adminadmin`. \
+      Don't forget to change the login password to something else! \
       You can change it at 'Tools' menu -> 'Options...' -> 'Web UI' tab -> 'Authentication'.
 
 4. Stopping container
