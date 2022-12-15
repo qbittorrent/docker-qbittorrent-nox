@@ -36,6 +36,8 @@ RUN \
     -B build \
     -G Ninja \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_CXX_FLAGS="-flto=auto" \
+    -DCMAKE_EXE_LINKER_FLAGS="-flto=auto" \
     -DGUI=OFF \
     -DQT6=ON && \
   cmake --build build && \
