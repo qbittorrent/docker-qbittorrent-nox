@@ -2,12 +2,12 @@ version: "3.9"
 
 services:
   qbittorrent-nox:
-    image: qbittorrentofficial/qbittorrent-nox:${QBT_VERSION}
     container_name: qbittorrent-nox
     environment:
       - QBT_EULA=${QBT_EULA}
       - QBT_VERSION=${QBT_VERSION}
       - QBT_WEBUI_PORT=${QBT_WEBUI_PORT}
+    image: qbittorrentofficial/qbittorrent-nox:${QBT_VERSION}
     ports:
       # for bittorrent traffic
       - 6881:6881/tcp
