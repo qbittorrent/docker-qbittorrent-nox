@@ -78,6 +78,7 @@ https://github.com/qbittorrent/qBittorrent/issues
         -t \
         --read-only \
         --rm \
+        --stop-timeout 1800 \
         --tmpfs /tmp \
         --name qbittorrent-nox \
         -e QBT_EULA \
