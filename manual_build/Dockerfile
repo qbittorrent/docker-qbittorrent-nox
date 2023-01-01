@@ -54,7 +54,8 @@ RUN \
     libtorrent-rasterbar \
     python3 \
     qt6-qtbase \
-    tini
+    tini \
+    tzdata
 
 RUN \
   adduser \

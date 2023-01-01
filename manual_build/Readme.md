@@ -74,6 +74,7 @@ There are some paths involved:
     --name qbittorrent-nox \
     -e QBT_EULA \
     -e QBT_WEBUI_PORT \
+    -e TZ=UTC \
     -p "$QBT_WEBUI_PORT":"$QBT_WEBUI_PORT"/tcp \
     -p 6881:6881/tcp \
     -p 6881:6881/udp \
@@ -81,6 +82,9 @@ There are some paths involved:
     -v "$QBT_DOWNLOADS_PATH":/downloads \
     qbittorrent-nox:"$QBT_VERSION"
   ```
+
+  A few notes:
+  * By default the timezone in the container is set to `UTC`. You probably want to change it to match your own timezone.
 
 * Using Docker Compose:
   ```shell
@@ -90,7 +94,7 @@ There are some paths involved:
 * Then you can login to qBittorrent-nox at: `http://127.0.0.1:8080` \
   The default username/password is: `admin/adminadmin`. \
   Don't forget to change the login password to something else! \
-  You can change it at 'Tools' menu -> 'Options...' -> 'Web UI' tab -> 'Authentication'.
+  You can change it at 'Tools' menu -> 'Options...' -> 'Web UI' tab -> 'Authentication'
 
 ## Stopping container
 

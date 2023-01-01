@@ -83,6 +83,7 @@ https://github.com/qbittorrent/qBittorrent/issues
         --name qbittorrent-nox \
         -e QBT_EULA \
         -e QBT_WEBUI_PORT \
+        -e TZ=UTC \
         -p "$QBT_WEBUI_PORT":"$QBT_WEBUI_PORT"/tcp \
         -p 6881:6881/tcp \
         -p 6881:6881/udp \
@@ -90,7 +91,11 @@ https://github.com/qbittorrent/qBittorrent/issues
         -v "$QBT_DOWNLOADS_PATH":/downloads \
         qbittorrentofficial/qbittorrent-nox:${QBT_VERSION}
       ```
-      Alternatively, you can use `ghcr.io/qbittorrent/docker-qbittorrent-nox:${QBT_VERSION}` for the image path.
+
+      A few notes:
+      * Alternatively, you can use `ghcr.io/qbittorrent/docker-qbittorrent-nox:${QBT_VERSION}`
+        for the image path.
+      * By default the timezone in the container is set to `UTC`. You probably want to change it to match your own timezone.
 
     * If using Docker Compose:
       ```shell
@@ -100,7 +105,7 @@ https://github.com/qbittorrent/qBittorrent/issues
     * Then you can login to qBittorrent-nox at: `http://127.0.0.1:8080` \
       The default username/password is: `admin/adminadmin`. \
       Don't forget to change the login password to something else! \
-      You can change it at 'Tools' menu -> 'Options...' -> 'Web UI' tab -> 'Authentication'.
+      You can change it at 'Tools' menu -> 'Options...' -> 'Web UI' tab -> 'Authentication'
 
 4. Stopping container
 
