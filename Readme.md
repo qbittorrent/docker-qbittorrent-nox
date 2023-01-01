@@ -72,7 +72,7 @@ https://github.com/qbittorrent/qBittorrent/issues
         QBT_EULA=<put_accept_here> \
         QBT_VERSION=latest \
         QBT_WEBUI_PORT=8080 \
-        QBT_CONFIG_PATH="<your_path>/config"
+        QBT_CONFIG_PATH="<your_path>/config" \
         QBT_DOWNLOADS_PATH="<your_path>/downloads"
       docker run \
         -t \

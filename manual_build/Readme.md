@@ -63,7 +63,7 @@ There are some paths involved:
     QBT_EULA=<put_accept_here> \
     QBT_VERSION=devel \
     QBT_WEBUI_PORT=8080 \
-    QBT_CONFIG_PATH="<your_path>config"
+    QBT_CONFIG_PATH="<your_path>config" \
     QBT_DOWNLOADS_PATH="<your_path>downloads"
   docker run \
     -t \
