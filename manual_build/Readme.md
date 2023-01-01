@@ -100,7 +100,7 @@ There are some paths involved:
 
 * Using Docker (not Docker Compose):
   ```shell
-  docker stop -t 1800 qbittorrent-nox
+  docker stop qbittorrent-nox
   ```
 
 * Using Docker Compose:

@@ -111,7 +111,7 @@ https://github.com/qbittorrent/qBittorrent/issues
 
     * When using Docker (not Docker Compose):
       ```shell
-      docker stop -t 1800 qbittorrent-nox
+      docker stop qbittorrent-nox
       ```
 
     * When using Docker Compose:
