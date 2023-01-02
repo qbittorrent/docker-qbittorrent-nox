@@ -76,11 +76,11 @@ https://github.com/qbittorrent/qBittorrent/issues
         QBT_DOWNLOADS_PATH="<your_path>/downloads"
       docker run \
         -t \
+        --name qbittorrent-nox \
         --read-only \
         --rm \
         --stop-timeout 1800 \
         --tmpfs /tmp \
-        --name qbittorrent-nox \
         -e QBT_EULA \
         -e QBT_WEBUI_PORT \
         -e TZ=UTC \
@@ -92,15 +92,20 @@ https://github.com/qbittorrent/qBittorrent/issues
         qbittorrentofficial/qbittorrent-nox:${QBT_VERSION}
       ```
 
-      A few notes:
-      * Alternatively, you can use `ghcr.io/qbittorrent/docker-qbittorrent-nox:${QBT_VERSION}`
-        for the image path.
-      * By default the timezone in the container is set to `UTC`. You probably want to change it to match your own timezone.
-
     * If using Docker Compose:
       ```shell
       docker compose up
       ```
+
+    * A few notes:
+      * Alternatively, you can use `ghcr.io/qbittorrent/docker-qbittorrent-nox:${QBT_VERSION}`
+        for the image path.
+      * By default the timezone in the container is set to `UTC`. You can set the environment variable
+        `TZ` to your preferred value.
+      * You can change the User ID (UID) and Group ID (GID) of the `qbittorrent-nox` process by setting
+        environment variables `PUID` and `PGID` respectively. By default they are both set to `1000`.
+        Note that you will also need to remove `--read-only` flag (when using Docker) or set
+        `read_only: false` (when using Docker Compose) as they are incompatible with it.
 
     * Then you can login to qBittorrent-nox at: `http://127.0.0.1:8080` \
       The default username/password is: `admin/adminadmin`. \

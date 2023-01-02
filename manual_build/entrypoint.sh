@@ -4,6 +4,11 @@ downloadsPath="/downloads"
 profilePath="/config"
 qbtConfigFile="$profilePath/qBittorrent/config/qBittorrent.conf"
 
+: "${GUID:=1000}"
+: "${PUID:=1000}"
+sed -i "s|^qbtUser:x:[0-9]*:[0-9]*:|qbtUser:x:$PUID:$GUID:|g" "/etc/passwd"
+sed -i "s|^qbtUser:x:[0-9]*:|qbtUser:x:$GUID:|g" "/etc/group"
+
 if [ ! -f "$qbtConfigFile" ]; then
     mkdir -p "$(dirname $qbtConfigFile)"
     cat << EOF > "$qbtConfigFile"

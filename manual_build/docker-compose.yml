@@ -5,6 +5,8 @@ services:
     build: .
     container_name: qbittorrent-nox
     environment:
+      #- PGID=1000
+      #- PUID=1000
       - QBT_EULA=${QBT_EULA}
       - QBT_VERSION=${QBT_VERSION}
       - QBT_WEBUI_PORT=${QBT_WEBUI_PORT}
