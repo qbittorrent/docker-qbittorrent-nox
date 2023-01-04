@@ -10,24 +10,36 @@ env:
   QBT_VERSION: "4.5.0"
 
   # This is a positive integer number that allows to differentiate between consecutive builds of the same qBittorrent version.
-  # When `QBT_VERSION` is incremented, this value must be reset to 1.
+  # When `QBT_VERSION` is incremented, this value must reset to 1.
   TAG_RELEASE_NUMBER: 4
 
-  PLATFORMS: "linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8"
 
 jobs:
   build:
-    name: Release
+    name: Release - Build
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        platform:
+          - "linux/amd64"
+          - "linux/arm/v6"
+          - "linux/arm/v7"
+          - "linux/arm64/v8"
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set platform name
+        id: set-platform-name
+        run: |
+          echo "PLATFORM_NAME=${{ matrix.platform }}" | sed 's|/|-|g' >> $GITHUB_OUTPUT
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
-          platforms: ${{ env.PLATFORMS }}
+          platforms: ${{ matrix.platform }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -54,7 +66,7 @@ jobs:
         with:
           build-args: |
             QBT_VERSION=${{ env.QBT_VERSION }}
-          platforms: ${{ env.PLATFORMS }}
+          platforms: ${{ matrix.platform }}
           push: true
           labels: |
             org.opencontainers.image.description=An advanced BitTorrent client programmed in C++, based on Qt toolkit and libtorrent-rasterbar
@@ -67,7 +79,60 @@ jobs:
             org.opencontainers.image.vendor=qBittorrent
             org.opencontainers.image.version=${{ env.QBT_VERSION }}
           tags: |
-            qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}-${{ env.TAG_RELEASE_NUMBER }}
-            qbittorrentofficial/qbittorrent-nox:latest
-            ghcr.io/qbittorrent/docker-qbittorrent-nox:${{ env.QBT_VERSION }}-${{ env.TAG_RELEASE_NUMBER }}
-            ghcr.io/qbittorrent/docker-qbittorrent-nox:latest
+            qbittorrentofficial/qbittorrent-nox:temp-${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
+            ghcr.io/qbittorrent/docker-qbittorrent-nox:temp-${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
+
+
+  upload:
+    name: Release - Upload
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Create multi-arch images
+        run: |
+          docker manifest create \
+            qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}-${{ env.TAG_RELEASE_NUMBER }} \
+            --amend qbittorrentofficial/qbittorrent-nox:temp-linux-amd64 \
+            --amend qbittorrentofficial/qbittorrent-nox:temp-linux-arm-v6 \
+            --amend qbittorrentofficial/qbittorrent-nox:temp-linux-arm-v7 \
+            --amend qbittorrentofficial/qbittorrent-nox:temp-linux-arm64-v8
+          docker manifest create \
+            qbittorrentofficial/qbittorrent-nox:latest \
+            --amend qbittorrentofficial/qbittorrent-nox:temp-linux-amd64 \
+            --amend qbittorrentofficial/qbittorrent-nox:temp-linux-arm-v6 \
+            --amend qbittorrentofficial/qbittorrent-nox:temp-linux-arm-v7 \
+            --amend qbittorrentofficial/qbittorrent-nox:temp-linux-arm64-v8
+          docker manifest create \
+            ghcr.io/qbittorrent/docker-qbittorrent-nox:${{ env.QBT_VERSION }}-${{ env.TAG_RELEASE_NUMBER }} \
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:temp-linux-amd64 \
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:temp-linux-arm-v6 \
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:temp-linux-arm-v7 \
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:temp-linux-arm64-v8
+          docker manifest create \
+            ghcr.io/qbittorrent/docker-qbittorrent-nox:latest \
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:temp-linux-amd64 \
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:temp-linux-arm-v6 \
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:temp-linux-arm-v7 \
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:temp-linux-arm64-v8
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Login to GitHub Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Upload to registries
+        run: |
+          docker manifest push qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}-${{ env.TAG_RELEASE_NUMBER }}
+          docker manifest push qbittorrentofficial/qbittorrent-nox:latest
+          docker manifest push ghcr.io/qbittorrent/docker-qbittorrent-nox:${{ env.QBT_VERSION }}-${{ env.TAG_RELEASE_NUMBER }}
+          docker manifest push ghcr.io/qbittorrent/docker-qbittorrent-nox:latest
+          echo "::notice Remember to remove temp-* tags from the registries!"
