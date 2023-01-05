@@ -2,11 +2,12 @@
 FROM alpine:latest AS builder
 
 ARG QBT_VERSION
+ARG LIBBT_VERSION="2.0.8"
 
 # Check environment variables
 RUN \
-  if [ -z "$QBT_VERSION" ]; then \
-    echo 'Missing $QBT_VERSION variable. Check your command line arguments.' && \
+  if [ -z "${QBT_VERSION}" ]; then \
+    echo 'Missing QBT_VERSION variable. Check your command line arguments.' && \
     exit 1 ; \
   fi
 
@@ -26,13 +27,30 @@ RUN \
     boost-dev \
     cmake \
     g++ \
-    libtorrent-rasterbar-dev \
     ninja \
+    openssl-dev \
     qt6-qtbase-dev \
     qt6-qttools-dev
 
+# build libtorrent
 RUN \
-  if [ "$QBT_VERSION" = "devel" ]; then \
+  wget -O libtorrent.tar.gz "https://github.com/arvidn/libtorrent/releases/download/v${LIBBT_VERSION}/libtorrent-rasterbar-${LIBBT_VERSION}.tar.gz" && \
+  tar -xf libtorrent.tar.gz && \
+  cd "libtorrent-rasterbar-${LIBBT_VERSION}" && \
+  cmake \
+    -B build \
+    -G Ninja \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
+    -Ddeprecated-functions=OFF && \
+  cmake --build build -j $(nproc) && \
+  cmake --install build && \
+  cd /
+
+# build qbittorrent
+RUN \
+  if [ "${QBT_VERSION}" = "devel" ]; then \
     wget https://github.com/qbittorrent/qBittorrent/archive/refs/heads/master.zip && \
     unzip master.zip && \
     cd qBittorrent-master ; \
@@ -45,11 +63,15 @@ RUN \
     -B build \
     -G Ninja \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
     -DGUI=OFF \
     -DQT6=ON && \
   cmake --build build -j $(nproc) && \
   cmake --install build
+
+RUN \
+  ldd /usr/bin/qbittorrent-nox
 
 # image for running
 FROM alpine:latest
@@ -59,7 +81,6 @@ RUN \
     bash \
     curl \
     doas \
-    libtorrent-rasterbar \
     python3 \
     qt6-qtbase \
     tini \
@@ -74,7 +95,8 @@ RUN \
     qbtUser && \
   echo "permit nopass :root" >> "/etc/doas.d/doas.conf"
 
-COPY --from=builder /usr/local/bin/qbittorrent-nox /usr/bin/qbittorrent-nox
+COPY --from=builder /usr/lib/libtorrent-rasterbar.so.10 /usr/lib/libtorrent-rasterbar.so.10
+COPY --from=builder /usr/bin/qbittorrent-nox /usr/bin/qbittorrent-nox
 
 COPY entrypoint.sh /entrypoint.sh
 
