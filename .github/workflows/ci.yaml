@@ -16,19 +16,39 @@ jobs:
     name: CI
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        platform:
+          - "linux/amd64"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set platform name
+        id: set-platform-name
+        run: |
+          echo "PLATFORM_NAME=${{ matrix.platform }}" | sed 's|/|-|g' >> $GITHUB_OUTPUT
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: ${{ matrix.platform }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+        with:
+          config-inline: |
+            [worker.oci]
+              max-parallelism = 1
 
       - name: Build
         uses: docker/build-push-action@v3
         with:
           build-args: |
             QBT_VERSION=${{ env.QBT_VERSION }}
-          outputs: type=docker,dest=./qBittorrent-docker-x64-${{ env.QBT_VERSION }}
+          load: true
+          platforms: ${{ matrix.platform }}
           labels: |
             org.opencontainers.image.description=An advanced BitTorrent client programmed in C++, based on Qt toolkit and libtorrent-rasterbar
             org.opencontainers.image.documentation=https://github.com/qbittorrent/docker-qbittorrent-nox
@@ -40,15 +60,21 @@ jobs:
             org.opencontainers.image.vendor=qBittorrent
             org.opencontainers.image.version=master
           tags: |
-            qbittorrent-nox:${{ env.QBT_VERSION }}
+            qbittorrent-nox_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}:${{ env.QBT_VERSION }}
 
       - name: Test run
         run: |
-          docker load < "qBittorrent-docker-x64-${{ env.QBT_VERSION }}"
           docker run \
             --entrypoint "/usr/bin/qbittorrent-nox" \
-            qbittorrent-nox:${{ env.QBT_VERSION }} \
+            --platform ${{ matrix.platform }} \
+            qbittorrent-nox_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}:${{ env.QBT_VERSION }} \
             --version
+
+      - name: Export image
+        run: |
+          docker save \
+            --output qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-platform-name.outputs.PLATFORM_NAME }} \
+            qbittorrent-nox_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}:${{ env.QBT_VERSION }}
 
       # To run the image locally:
       # 1. `docker load < artifact`
@@ -57,5 +83,5 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: qBittorrent-docker-x64-${{ env.QBT_VERSION }}
-          path: qBittorrent-docker-x64-${{ env.QBT_VERSION }}
+          name: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
+          path: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
