@@ -82,6 +82,14 @@ jobs:
             qbittorrentofficial/qbittorrent-nox:temp-${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
             ghcr.io/qbittorrent/docker-qbittorrent-nox:temp-${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
 
+      - name: Test run
+        run: |
+          docker run \
+            --entrypoint "/usr/bin/qbittorrent-nox" \
+            --platform ${{ matrix.platform }} \
+            qbittorrentofficial/qbittorrent-nox:temp-${{ steps.set-platform-name.outputs.PLATFORM_NAME }} \
+            --version
+
 
   upload:
     name: Release - Upload

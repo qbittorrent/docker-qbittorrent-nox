@@ -39,6 +39,16 @@ jobs:
             org.opencontainers.image.url=https://github.com/qbittorrent/docker-qbittorrent-nox
             org.opencontainers.image.vendor=qBittorrent
             org.opencontainers.image.version=master
+          tags: |
+            qbittorrent-nox:${{ env.QBT_VERSION }}
+
+      - name: Test run
+        run: |
+          docker load < "qBittorrent-docker-x64-${{ env.QBT_VERSION }}"
+          docker run \
+            --entrypoint "/usr/bin/qbittorrent-nox" \
+            qbittorrent-nox:${{ env.QBT_VERSION }} \
+            --version
 
       # To run the image locally:
       # 1. `docker load < artifact`
