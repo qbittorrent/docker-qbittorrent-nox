@@ -3,8 +3,6 @@ FROM alpine:latest AS builder
 
 ARG QBT_VERSION
 
-# alpine linux qbittorrent package: https://git.alpinelinux.org/aports/tree/community/qbittorrent/APKBUILD
-
 # Check environment variables
 RUN \
   if [ -z "$QBT_VERSION" ]; then \
@@ -12,6 +10,17 @@ RUN \
     exit 1 ; \
   fi
 
+# Compiler, linker options:
+# https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
+# https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
+# https://sourceware.org/binutils/docs/ld/Options.html
+ENV CFLAGS="-pipe -fcf-protection -fstack-clash-protection -fstack-protector-strong -fno-plt -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS" \
+    CXXFLAGS="-pipe -fcf-protection -fstack-clash-protection -fstack-protector-strong -fno-plt -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS" \
+    LDFLAGS="-gz -Wl,-O1,--as-needed,--sort-common,-z,now,-z,relro"
+
+# alpine linux packages:
+# https://git.alpinelinux.org/aports/tree/community/libtorrent-rasterbar/APKBUILD
+# https://git.alpinelinux.org/aports/tree/community/qbittorrent/APKBUILD
 RUN \
   apk --update-cache add \
     boost-dev \
@@ -36,7 +45,6 @@ RUN \
     -B build \
     -G Ninja \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DCMAKE_EXE_LINKER_FLAGS="-gz" \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
     -DGUI=OFF \
     -DQT6=ON && \
