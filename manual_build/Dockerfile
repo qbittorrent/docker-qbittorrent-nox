@@ -29,6 +29,7 @@ RUN \
     g++ \
     ninja \
     openssl-dev \
+    patch \
     qt6-qtbase-dev \
     qt6-qttools-dev
 
@@ -37,9 +38,12 @@ RUN \
   wget -O libtorrent.tar.gz "https://github.com/arvidn/libtorrent/releases/download/v${LIBBT_VERSION}/libtorrent-rasterbar-${LIBBT_VERSION}.tar.gz" && \
   tar -xf libtorrent.tar.gz && \
   cd "libtorrent-rasterbar-${LIBBT_VERSION}" && \
+  wget -O static_build.patch "https://github.com/arvidn/libtorrent/commit/a7be63c0f36371fcba020254c38f93710dd6df4b.patch" && \
+  patch -Np1 -i static_build.patch && \
   cmake \
     -B build \
     -G Ninja \
+    -DBUILD_SHARED_LIBS=OFF \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
@@ -95,7 +99,6 @@ RUN \
     qbtUser && \
   echo "permit nopass :root" >> "/etc/doas.d/doas.conf"
 
-COPY --from=builder /usr/lib/libtorrent-rasterbar.so.10 /usr/lib/libtorrent-rasterbar.so.10
 COPY --from=builder /usr/bin/qbittorrent-nox /usr/bin/qbittorrent-nox
 
 COPY entrypoint.sh /entrypoint.sh
