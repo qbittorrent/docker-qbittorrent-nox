@@ -56,7 +56,7 @@ RUN \
 RUN \
   if [ "${QBT_VERSION}" = "devel" ]; then \
     wget https://github.com/qbittorrent/qBittorrent/archive/refs/heads/master.zip && \
-    unzip master.zip && \
+    unzip -q master.zip && \
     cd qBittorrent-master ; \
   else \
     wget "https://github.com/qbittorrent/qBittorrent/archive/refs/tags/release-${QBT_VERSION}.tar.gz" && \
