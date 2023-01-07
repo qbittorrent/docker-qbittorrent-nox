@@ -2,7 +2,7 @@
 FROM alpine:latest AS builder
 
 ARG QBT_VERSION
-ARG LIBBT_VERSION="2.0.8"
+ARG LIBBT_VERSION="1.2.18"
 
 # Check environment variables
 RUN \
