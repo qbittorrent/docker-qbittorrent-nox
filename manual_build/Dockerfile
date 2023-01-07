@@ -4,14 +4,14 @@ FROM alpine:latest AS builder
 ARG QBT_VERSION
 ARG LIBBT_VERSION="1.2.18"
 
-# Check environment variables
+# check environment variables
 RUN \
   if [ -z "${QBT_VERSION}" ]; then \
     echo 'Missing QBT_VERSION variable. Check your command line arguments.' && \
     exit 1 ; \
   fi
 
-# Compiler, linker options:
+# compiler, linker options:
 # https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
 # https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
 # https://sourceware.org/binutils/docs/ld/Options.html
@@ -49,8 +49,7 @@ RUN \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
     -Ddeprecated-functions=OFF && \
   cmake --build build -j $(nproc) && \
-  cmake --install build && \
-  cd /
+  cmake --install build
 
 # build qbittorrent
 RUN \
