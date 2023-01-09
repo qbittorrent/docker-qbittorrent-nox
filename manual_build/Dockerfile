@@ -11,14 +11,6 @@ RUN \
     exit 1 ; \
   fi
 
-# compiler, linker options:
-# https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
-# https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
-# https://sourceware.org/binutils/docs/ld/Options.html
-ENV CFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS" \
-    CXXFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS" \
-    LDFLAGS="-gz -Wl,-O1,--as-needed,--sort-common,-z,now,-z,relro"
-
 # alpine linux packages:
 # https://git.alpinelinux.org/aports/tree/community/libtorrent-rasterbar/APKBUILD
 # https://git.alpinelinux.org/aports/tree/community/qbittorrent/APKBUILD
@@ -32,6 +24,14 @@ RUN \
     patch \
     qt6-qtbase-dev \
     qt6-qttools-dev
+
+# compiler, linker options:
+# https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
+# https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
+# https://sourceware.org/binutils/docs/ld/Options.html
+ENV CFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS" \
+    CXXFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS" \
+    LDFLAGS="-gz -Wl,-O1,--as-needed,--sort-common,-z,now,-z,relro"
 
 # build libtorrent
 RUN \
