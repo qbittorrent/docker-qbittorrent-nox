@@ -29,8 +29,8 @@ RUN \
 # https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
 # https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
 # https://sourceware.org/binutils/docs/ld/Options.html
-ENV CFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS" \
-    CXXFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS" \
+ENV CFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS" \
+    CXXFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS" \
     LDFLAGS="-gz -Wl,-O1,--as-needed,--sort-common,-z,now,-z,relro"
 
 # build libtorrent
