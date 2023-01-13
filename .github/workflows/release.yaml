@@ -77,6 +77,10 @@ jobs:
             qbittorrentofficial/qbittorrent-nox:temp-${{ steps.set-platform-name.outputs.PLATFORM_NAME }} \
             --version
 
+      # To run the image locally:
+      # 1. `docker load < artifact`
+      # 2. remove `build` field and replace `image` field with the imported image in docker-compose.yml
+      # 3. `docker compose up`
       - name: Export image
         run: |
           docker tag \
@@ -86,10 +90,6 @@ jobs:
             --output qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-platform-name.outputs.PLATFORM_NAME }} \
             qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}
 
-      # To run the image locally:
-      # 1. `docker load < artifact`
-      # 2. remove `build` field and replace `image` field with the imported image in docker-compose.yml
-      # 3. `docker compose up`
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
