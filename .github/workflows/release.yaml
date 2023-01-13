@@ -13,7 +13,6 @@ env:
   # When `QBT_VERSION` is incremented, this value must reset to 1.
   TAG_RELEASE_NUMBER: 5
 
-
 jobs:
   build:
     name: Release - Build

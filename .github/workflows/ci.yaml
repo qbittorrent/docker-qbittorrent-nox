@@ -4,9 +4,6 @@ on: [pull_request, push]
 
 permissions: {}
 
-env:
-  QBT_VERSION: "devel"
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: ${{ github.head_ref != '' }}
@@ -46,7 +43,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           build-args: |
-            QBT_VERSION=${{ env.QBT_VERSION }}
+            QBT_VERSION=devel
           load: true
           platforms: ${{ matrix.platform }}
           labels: |
@@ -60,14 +57,14 @@ jobs:
             org.opencontainers.image.vendor=qBittorrent
             org.opencontainers.image.version=master
           tags: |
-            qbittorrent-nox_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}:${{ env.QBT_VERSION }}
+            qbittorrent-nox_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}:devel
 
       - name: Test run
         run: |
           docker run \
             --entrypoint "/usr/bin/qbittorrent-nox" \
             --platform ${{ matrix.platform }} \
-            qbittorrent-nox_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}:${{ env.QBT_VERSION }} \
+            qbittorrent-nox_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}:devel \
             --version
 
       # To run the image locally:
@@ -77,11 +74,11 @@ jobs:
       - name: Export image
         run: |
           docker save \
-            --output qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-platform-name.outputs.PLATFORM_NAME }} \
-            qbittorrent-nox_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}:${{ env.QBT_VERSION }}
+            --output qbittorrent-nox_devel_${{ steps.set-platform-name.outputs.PLATFORM_NAME }} \
+            qbittorrent-nox_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}:devel
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
-          path: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
+          name: qbittorrent-nox_devel_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
+          path: qbittorrent-nox_devel_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
