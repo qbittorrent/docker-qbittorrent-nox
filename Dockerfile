@@ -2,6 +2,7 @@
 FROM alpine:latest AS builder
 
 ARG QBT_VERSION
+ARG LIBBT_CMAKE_FLAGS=""
 ARG LIBBT_VERSION="1.2.18"
 
 # check environment variables
@@ -56,7 +57,8 @@ RUN \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
-    -Ddeprecated-functions=OFF && \
+    -Ddeprecated-functions=OFF \
+    $LIBBT_CMAKE_FLAGS && \
   cmake --build build -j $(nproc) && \
   cmake --install build
 
