@@ -18,6 +18,7 @@ RUN \
   apk --update-cache add \
     boost-dev \
     cmake \
+    git \
     g++ \
     ninja \
     openssl-dev \
@@ -35,9 +36,17 @@ ENV CFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -U_
 
 # build libtorrent
 RUN \
-  wget -O libtorrent.tar.gz "https://github.com/arvidn/libtorrent/releases/download/v${LIBBT_VERSION}/libtorrent-rasterbar-${LIBBT_VERSION}.tar.gz" && \
-  tar -xf libtorrent.tar.gz && \
-  cd "libtorrent-rasterbar-${LIBBT_VERSION}" && \
+  if [ "${LIBBT_VERSION}" = "devel" ]; then \
+    git clone \
+      --depth 1 \
+      --recurse-submodules \
+      https://github.com/arvidn/libtorrent.git && \
+    cd libtorrent ; \
+  else \
+    wget "https://github.com/arvidn/libtorrent/releases/download/v${LIBBT_VERSION}/libtorrent-rasterbar-${LIBBT_VERSION}.tar.gz" && \
+    tar -xf "libtorrent-rasterbar-${LIBBT_VERSION}.tar.gz" && \
+    cd "libtorrent-rasterbar-${LIBBT_VERSION}" ; \
+  fi && \
   wget -O static_build.patch "https://github.com/arvidn/libtorrent/commit/a7be63c0f36371fcba020254c38f93710dd6df4b.patch" && \
   patch -Np1 -i static_build.patch && \
   cmake \
