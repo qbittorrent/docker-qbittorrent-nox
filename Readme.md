@@ -50,7 +50,8 @@ https://github.com/qbittorrent/qBittorrent/issues
     * `QBT_VERSION` \
       This environment variable specifies the version of qBittorrent-nox to use. \
       For example, `4.4.5-1` is a valid entry. You can find all tagged versions [here](https://hub.docker.com/r/qbittorrentofficial/qbittorrent-nox/tags). \
-      Or you can put `latest` to use the latest stable release of qBittorrent.
+      Or you can put `latest` to use the latest stable release of qBittorrent. \
+      If you are up to test the bleeding-edge version, you can put `alpha` to get the weekly build.
     * `QBT_WEBUI_PORT` \
       This environment variable sets the port number which qBittorrent WebUI will be binded to.
 
