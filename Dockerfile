@@ -89,6 +89,25 @@ RUN \
 RUN \
   ldd /usr/bin/qbittorrent-nox
 
+# record compile-time Software Bill of Materials (sbom)
+RUN \
+  printf "Software Bill of Materials for building qbittorrent-nox\n\n" >> /sbom.txt && \
+  if [ "${LIBBT_VERSION}" = "devel" ]; then \
+    cd libtorrent && \
+    echo "libtorrent-rasterbar git $(git rev-parse HEAD)" >> /sbom.txt ; \
+  else \
+    echo "libtorrent-rasterbar ${LIBBT_VERSION}" >> /sbom.txt ; \
+  fi && \
+  if [ "${QBT_VERSION}" = "devel" ]; then \
+    cd qBittorrent && \
+    echo "qBittorrent git $(git rev-parse HEAD)" >> /sbom.txt ; \
+  else \
+    echo "qBittorrent ${QBT_VERSION}" >> /sbom.txt ; \
+  fi && \
+  echo >> /sbom.txt && \
+  apk list -I | sort >> /sbom.txt && \
+  cat /sbom.txt
+
 # image for running
 FROM alpine:latest
 
@@ -113,6 +132,8 @@ RUN \
   echo "permit nopass :root" >> "/etc/doas.d/doas.conf"
 
 COPY --from=builder /usr/bin/qbittorrent-nox /usr/bin/qbittorrent-nox
+
+COPY --from=builder /sbom.txt /sbom.txt
 
 COPY entrypoint.sh /entrypoint.sh
 

@@ -107,6 +107,10 @@ https://github.com/qbittorrent/qBittorrent/issues
         environment variables `PUID` and `PGID` respectively. By default they are both set to `1000`.
         Note that you will also need to remove `--read-only` flag (when using Docker) or set
         `read_only: false` (when using Docker Compose) as they are incompatible with it.
+      * You can list the compile-time Software Bill of Materials (sbom) with the following command:
+        ```shell
+        docker run --entrypoint /bin/cat --rm qbittorrentofficial/qbittorrent-nox:latest /sbom.txt
+        ```
 
     * Then you can login to qBittorrent-nox at: `http://127.0.0.1:8080` \
       The default username/password is: `admin/adminadmin`. \
