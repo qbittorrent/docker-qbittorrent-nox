@@ -65,9 +65,11 @@ RUN \
 # build qbittorrent
 RUN \
   if [ "${QBT_VERSION}" = "devel" ]; then \
-    wget https://github.com/qbittorrent/qBittorrent/archive/refs/heads/master.tar.gz && \
-    tar -xf master.tar.gz && \
-    cd qBittorrent-master ; \
+    git clone \
+      --depth 1 \
+      --recurse-submodules \
+      https://github.com/qbittorrent/qBittorrent.git && \
+    cd qBittorrent ; \
   else \
     wget "https://github.com/qbittorrent/qBittorrent/archive/refs/tags/release-${QBT_VERSION}.tar.gz" && \
     tar -xf "release-${QBT_VERSION}.tar.gz" && \
