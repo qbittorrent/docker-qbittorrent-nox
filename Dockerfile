@@ -49,7 +49,7 @@ RUN \
     cd "libtorrent-rasterbar-${LIBBT_VERSION}" ; \
   fi && \
   wget -O static_build.patch "https://github.com/arvidn/libtorrent/commit/a7be63c0f36371fcba020254c38f93710dd6df4b.patch" && \
-  patch -Np1 -i static_build.patch && \
+  patch -Np1 -i static_build.patch || true && \
   cmake \
     -B build \
     -G Ninja \
