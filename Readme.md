@@ -132,3 +132,38 @@ https://github.com/qbittorrent/qBittorrent/issues
 ## Build image manually
 
 Refer to [manual_build](https://github.com/qbittorrent/docker-qbittorrent-nox/tree/main/manual_build) folder.
+
+## Debugging
+
+To attach gdb to the running qbittorent-nox process, follow the steps below:
+
+1. Before you start the container
+   * Remove `--read-only` as it will need additional packages within the container. \
+     Or disable the respective attributes in docker-compose.yml.
+   * Add `--cap-add=SYS_PTRACE` to `docker run` argument list. \
+     Or enable the respective attributes in docker-compose.yml.
+
+2. Start the container
+
+3. Drop into container
+   ```shell
+   # to find container id
+   docker ps
+   # drop into container
+   docker exec -it <container_id> /bin/sh
+   ```
+
+4. Install packages
+   ```shell
+   apk add \
+     gdb \
+     musl-dbg
+   ```
+
+5. Attach gdb to the running process
+   ```shell
+   # to find PID of qbittorrent-nox
+   ps -a
+   # attach debugger
+   gdb -p <PID>
+   ```

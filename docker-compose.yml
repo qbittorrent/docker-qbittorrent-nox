@@ -2,6 +2,9 @@ version: "3.9"
 
 services:
   qbittorrent-nox:
+    # for debugging
+    #cap_add:
+      #- SYS_PTRACE
     container_name: qbittorrent-nox
     environment:
       #- PGID=1000

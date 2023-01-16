@@ -116,7 +116,6 @@ RUN \
     bash \
     curl \
     doas \
-    musl-dbg \
     python3 \
     qt6-qtbase \
     tini \
