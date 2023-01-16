@@ -87,7 +87,7 @@ RUN \
   cmake --install build
 
 RUN \
-  ldd /usr/bin/qbittorrent-nox
+  ldd /usr/bin/qbittorrent-nox | sort -f
 
 # record compile-time Software Bill of Materials (sbom)
 RUN \
