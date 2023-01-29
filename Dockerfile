@@ -94,13 +94,15 @@ RUN \
   printf "Software Bill of Materials for building qbittorrent-nox\n\n" >> /sbom.txt && \
   if [ "${LIBBT_VERSION}" = "devel" ]; then \
     cd libtorrent && \
-    echo "libtorrent-rasterbar git $(git rev-parse HEAD)" >> /sbom.txt ; \
+    echo "libtorrent-rasterbar git $(git rev-parse HEAD)" >> /sbom.txt && \
+    cd .. ; \
   else \
     echo "libtorrent-rasterbar ${LIBBT_VERSION}" >> /sbom.txt ; \
   fi && \
   if [ "${QBT_VERSION}" = "devel" ]; then \
     cd qBittorrent && \
-    echo "qBittorrent git $(git rev-parse HEAD)" >> /sbom.txt ; \
+    echo "qBittorrent git $(git rev-parse HEAD)" >> /sbom.txt && \
+    cd .. ; \
   else \
     echo "qBittorrent ${QBT_VERSION}" >> /sbom.txt ; \
   fi && \
