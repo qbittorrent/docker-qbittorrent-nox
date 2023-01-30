@@ -5,12 +5,23 @@ profilePath="/config"
 qbtConfigFile="$profilePath/qBittorrent/config/qBittorrent.conf"
 
 if [ -n "$PUID" ]; then
-    sed -i "s|^qbtUser:x:[0-9]*:|qbtUser:x:$PUID:|g" "/etc/passwd"
+    sed -i "s|^qbtUser:x:[0-9]*:|qbtUser:x:$PUID:|g" /etc/passwd
 fi
 
 if [ -n "$PGID" ]; then
-    sed -i "s|^\(qbtUser:x:[0-9]*\):[0-9]*:|\1:$PGID:|g" "/etc/passwd"
-    sed -i "s|^qbtUser:x:[0-9]*:|qbtUser:x:$PGID:|g" "/etc/group"
+    sed -i "s|^\(qbtUser:x:[0-9]*\):[0-9]*:|\1:$PGID:|g" /etc/passwd
+    sed -i "s|^qbtUser:x:[0-9]*:|qbtUser:x:$PGID:|g" /etc/group
+fi
+
+if [ -n "$PAGID" ]; then
+    _origIFS=$IFS
+    IFS=','
+    for AGID in $PAGID; do
+        AGID=$(echo "$AGID" | tr -d '[:space:]"')
+        addgroup -g "$AGID" "qbtGroup-$AGID"
+        addgroup qbtUser "qbtGroup-$AGID"
+    done
+    IFS=$_origIFS
 fi
 
 if [ ! -f "$qbtConfigFile" ]; then
