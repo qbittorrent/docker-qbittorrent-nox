@@ -15,6 +15,7 @@ services:
       - QBT_VERSION=${QBT_VERSION}
       - QBT_WEBUI_PORT=${QBT_WEBUI_PORT}
       #- TZ=UTC
+      #- UMASK=022
     image: qbittorrent-nox:${QBT_VERSION}
     ports:
       # for bittorrent traffic
