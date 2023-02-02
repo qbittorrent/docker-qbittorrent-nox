@@ -104,8 +104,13 @@ https://github.com/qbittorrent/qBittorrent/issues
       * By default the timezone in the container is set to `UTC`. You can set the environment variable
         `TZ` to your preferred value.
       * You can change the User ID (UID) and Group ID (GID) of the `qbittorrent-nox` process by setting
-        environment variables `PUID` and `PGID` respectively. By default they are both set to `1000`.
-        Note that you will also need to remove `--read-only` flag (when using Docker) or set
+        environment variables `PUID` and `PGID` respectively. By default they are both set to `1000`. \
+        Note that you will need to remove `--read-only` flag (when using Docker) or set
+        `read_only: false` (when using Docker Compose) as they are incompatible with it.
+      * You can set additional group ID (AGID) of the `qbittorrent-nox` process by setting the
+        environment variable `PAGID`. For example: `10000,10001`, this will set the process to be in
+        two (secondary) groups `10000` and `10001`. By default there is no additional group. \
+        Note that you will need to remove `--read-only` flag (when using Docker) or set
         `read_only: false` (when using Docker Compose) as they are incompatible with it.
       * You can list the compile-time Software Bill of Materials (sbom) with the following command:
         ```shell
