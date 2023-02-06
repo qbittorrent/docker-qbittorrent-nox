@@ -100,6 +100,8 @@ There are some paths involved:
     two (secondary) groups `10000` and `10001`. By default there is no additional group. \
     Note that you will need to remove `--read-only` flag (when using Docker) or set
     `read_only: false` (when using Docker Compose) as they are incompatible with it.
+  * It is possible to set the umask of the `qbittorrent-nox` process by setting the
+    environment variable `UMASK`. By default it uses the default from Alpine Linux.
   * You can list the compile-time Software Bill of Materials (sbom) with the following command:
     ```shell
     docker run --entrypoint /bin/cat --rm qbittorrentofficial/qbittorrent-nox:latest /sbom.txt

@@ -48,6 +48,11 @@ fi
 chown qbtUser:qbtUser "$downloadsPath"
 chown qbtUser:qbtUser -R "$profilePath"
 
+# set umask just before starting qbt
+if [ -n "$UMASK" ]; then
+    umask "$UMASK"
+fi
+
 doas -u qbtUser \
     qbittorrent-nox \
         --profile="$profilePath" \
