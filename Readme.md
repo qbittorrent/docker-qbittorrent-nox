@@ -84,7 +84,6 @@ https://github.com/qbittorrent/qBittorrent/issues
         --tmpfs /tmp \
         -e QBT_EULA \
         -e QBT_WEBUI_PORT \
-        -e TZ=UTC \
         -p "$QBT_WEBUI_PORT":"$QBT_WEBUI_PORT"/tcp \
         -p 6881:6881/tcp \
         -p 6881:6881/udp \
@@ -101,8 +100,8 @@ https://github.com/qbittorrent/qBittorrent/issues
     * A few notes:
       * Alternatively, you can use `ghcr.io/qbittorrent/docker-qbittorrent-nox:${QBT_VERSION}`
         for the image path.
-      * By default the timezone in the container is set to `UTC`. You can set the environment variable
-        `TZ` to your preferred value.
+      * By default the timezone in the container uses the default of alpine linux (which is most likely `UTC`).
+        You can set the environment variable `TZ` to your preferred value.
       * You can change the User ID (UID) and Group ID (GID) of the `qbittorrent-nox` process by setting
         environment variables `PUID` and `PGID` respectively. By default they are both set to `1000`. \
         Note that you will need to remove `--read-only` flag (when using Docker) or set

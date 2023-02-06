@@ -14,7 +14,7 @@ services:
       - QBT_EULA=${QBT_EULA}
       - QBT_VERSION=${QBT_VERSION}
       - QBT_WEBUI_PORT=${QBT_WEBUI_PORT}
-      - TZ=UTC
+      #- TZ=UTC
     image: qbittorrent-nox:${QBT_VERSION}
     ports:
       # for bittorrent traffic
