@@ -120,6 +120,7 @@ RUN \
     doas \
     python3 \
     qt6-qtbase \
+    qt6-qtbase-sqlite \
     tini \
     tzdata
 
