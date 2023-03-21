@@ -35,12 +35,12 @@ Session\TempPath=/downloads/temp
 [LegalNotice]
 Accepted=false
 EOF
+fi
 
-    if [ "$QBT_EULA" = "accept" ]; then
-        sed -i '/^\[LegalNotice\]$/{$!{N;s|\(\[LegalNotice\]\nAccepted=\).*|\1true|}}' "$qbtConfigFile"
-    else
-        sed -i '/^\[LegalNotice\]$/{$!{N;s|\(\[LegalNotice\]\nAccepted=\).*|\1false|}}' "$qbtConfigFile"
-    fi
+if [ "$QBT_EULA" = "accept" ]; then
+    sed -i '/^\[LegalNotice\]$/{$!{N;s|\(\[LegalNotice\]\nAccepted=\).*|\1true|}}' "$qbtConfigFile"
+else
+    sed -i '/^\[LegalNotice\]$/{$!{N;s|\(\[LegalNotice\]\nAccepted=\).*|\1false|}}' "$qbtConfigFile"
 fi
 
 # those are owned by root by default
