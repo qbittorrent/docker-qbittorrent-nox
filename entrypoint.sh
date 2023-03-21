@@ -37,7 +37,8 @@ Accepted=false
 EOF
 fi
 
-if [ "$QBT_EULA" = "accept" ]; then
+_eula=$(echo "$QBT_EULA" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
+if [ "$_eula" = "accept" ]; then
     sed -i '/^\[LegalNotice\]$/{$!{N;s|\(\[LegalNotice\]\nAccepted=\).*|\1true|}}' "$qbtConfigFile"
 else
     sed -i '/^\[LegalNotice\]$/{$!{N;s|\(\[LegalNotice\]\nAccepted=\).*|\1false|}}' "$qbtConfigFile"
