@@ -14,14 +14,14 @@ if [ -n "$PGID" ]; then
 fi
 
 if [ -n "$PAGID" ]; then
-    _origIFS=$IFS
+    _origIFS="$IFS"
     IFS=','
     for AGID in $PAGID; do
         AGID=$(echo "$AGID" | tr -d '[:space:]"')
         addgroup -g "$AGID" "qbtGroup-$AGID"
         addgroup qbtUser "qbtGroup-$AGID"
     done
-    IFS=$_origIFS
+    IFS="$_origIFS"
 fi
 
 if [ ! -f "$qbtConfigFile" ]; then
