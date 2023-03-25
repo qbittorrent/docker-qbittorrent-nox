@@ -44,6 +44,7 @@ It is also recommended to install Docker Compose as it can significantly ease th
   Or you can put `devel` to build the latest development version.
 * `QBT_WEBUI_PORT` \
   This environment variable sets the port number which qBittorrent WebUI will be binded to.
+  Defaults to port `8080` if value is not set.
 
 #### Volumes
 

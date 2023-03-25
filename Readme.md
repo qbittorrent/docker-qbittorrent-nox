@@ -54,6 +54,7 @@ https://github.com/qbittorrent/qBittorrent/issues
       If you are up to test the bleeding-edge version, you can put `alpha` to get the weekly build.
     * `QBT_WEBUI_PORT` \
       This environment variable sets the port number which qBittorrent WebUI will be binded to.
+      Defaults to port `8080` if value is not set.
 
     #### Volumes
 
