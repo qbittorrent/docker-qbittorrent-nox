@@ -118,7 +118,7 @@ https://github.com/qbittorrent/qBittorrent/issues
         docker run --entrypoint /bin/cat --rm qbittorrentofficial/qbittorrent-nox:latest /sbom.txt
         ```
 
-    * Then you can login to qBittorrent-nox at: `http://127.0.0.1:8080` \
+    * Then you can login to qBittorrent-nox at: `http://<your_docker_host_address>:8080` \
       The default username/password is: `admin/adminadmin`. \
       Don't forget to change the login password to something else! \
       You can change it at 'Tools' menu -> 'Options...' -> 'Web UI' tab -> 'Authentication'
