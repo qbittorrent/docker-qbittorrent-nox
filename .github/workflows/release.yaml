@@ -120,6 +120,19 @@ jobs:
     needs: build
 
     steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Login to GitHub Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
       - name: Create multi-arch images
         run: |
           docker manifest create \
@@ -146,19 +159,6 @@ jobs:
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm-v6 \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm-v7 \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm64-v8
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-      - name: Login to GitHub Container registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
 
       - name: Upload to registries
         run: |
