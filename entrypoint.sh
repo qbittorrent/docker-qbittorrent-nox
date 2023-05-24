@@ -58,8 +58,9 @@ if [ -n "$UMASK" ]; then
     umask "$UMASK"
 fi
 
-doas -u qbtUser \
-    qbittorrent-nox \
-        --profile="$profilePath" \
-        --webui-port="$QBT_WEBUI_PORT" \
-        "$@"
+exec \
+    doas -u qbtUser \
+        qbittorrent-nox \
+            --profile="$profilePath" \
+            --webui-port="$QBT_WEBUI_PORT" \
+            "$@"
