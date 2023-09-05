@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set platform name
         id: set-platform-name
@@ -40,7 +40,7 @@ jobs:
               max-parallelism = 1
 
       - name: Build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           build-args: |
             QBT_VERSION=devel
