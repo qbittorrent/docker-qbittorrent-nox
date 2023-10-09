@@ -78,8 +78,7 @@ RUN \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
-    -DGUI=OFF \
-    -DQT6=ON && \
+    -DGUI=OFF && \
   cmake --build build -j $(nproc) && \
   cmake --install build
 
