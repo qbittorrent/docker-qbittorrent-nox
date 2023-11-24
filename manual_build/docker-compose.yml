@@ -9,7 +9,7 @@ services:
       #- PAGID=10000
       #- PGID=1000
       #- PUID=1000
-      - QBT_EULA=${QBT_EULA}
+      - QBT_LEGAL_NOTICE=${QBT_LEGAL_NOTICE}
       - QBT_VERSION=${QBT_VERSION}
       - QBT_WEBUI_PORT=${QBT_WEBUI_PORT}
       #- TZ=UTC
