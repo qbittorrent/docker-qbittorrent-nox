@@ -1,5 +1,11 @@
+# create an up-to-date base image for everything
+FROM alpine:latest AS base
+
+RUN \
+  apk --no-cache --update-cache upgrade
+
 # image for building
-FROM alpine:latest AS builder
+FROM base AS builder
 
 ARG QBT_VERSION
 ARG LIBBT_CMAKE_FLAGS=""
@@ -16,7 +22,7 @@ RUN \
 # https://git.alpinelinux.org/aports/tree/community/libtorrent-rasterbar/APKBUILD
 # https://git.alpinelinux.org/aports/tree/community/qbittorrent/APKBUILD
 RUN \
-  apk --update-cache add \
+  apk add \
     boost-dev \
     cmake \
     git \
@@ -108,7 +114,7 @@ RUN \
   cat /sbom.txt
 
 # image for running
-FROM alpine:latest
+FROM base
 
 RUN \
   apk --no-cache add \
