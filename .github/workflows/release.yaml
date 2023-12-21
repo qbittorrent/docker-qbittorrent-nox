@@ -38,7 +38,7 @@ jobs:
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-        if: (matrix.platform != "linux/386") && (matrix.platform != "linux/amd64")
+        if: (matrix.platform != 'linux/386') && (matrix.platform != 'linux/amd64')
         with:
           platforms: ${{ matrix.platform }}
 
