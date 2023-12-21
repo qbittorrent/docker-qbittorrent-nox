@@ -5,6 +5,7 @@ Repository on GitHub: https://github.com/qbittorrent/docker-qbittorrent-nox
 
 ## Supported architectures
 
+* linux/386
 * linux/amd64
 * linux/arm/v6
 * linux/arm/v7
