@@ -31,9 +31,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set platform name
-        id: set-platform-name
+      - name: Set variables
+        id: set-variables
         run: |
+          echo "DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_OUTPUT
           echo "PLATFORM_NAME=${{ matrix.platform }}" | sed 's|/|-|g' >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
@@ -49,33 +50,39 @@ jobs:
             [worker.oci]
               max-parallelism = 1
 
-      - name: Build and push
+      - name: Build image
         uses: docker/build-push-action@v5
         with:
           build-args: |
             QBT_VERSION=${{ env.QBT_VERSION }}
-          load: true
-          platforms: ${{ matrix.platform }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           labels: |
+            org.opencontainers.image.authors=https://github.com/qbittorrent/qBittorrent/graphs/contributors
+            org.opencontainers.image.base.name=docker.io/alpine:latest
             org.opencontainers.image.description=An advanced BitTorrent client programmed in C++, based on Qt toolkit and libtorrent-rasterbar
-            org.opencontainers.image.documentation=https://github.com/qbittorrent/docker-qbittorrent-nox
+            org.opencontainers.image.documentation=https://github.com/qbittorrent/docker-qbittorrent-nox#qbittorrent-nox-docker-image-
+            org.opencontainers.image.created=${{ steps.set-variables.outputs.DATE }}
             org.opencontainers.image.licenses=GPL-3.0+
+            org.opencontainers.image.ref.name=${{ env.QBT_VERSION }}-${{ env.TAG_RELEASE_NUMBER }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.source=https://github.com/qbittorrent/docker-qbittorrent-nox
             org.opencontainers.image.title=qbittorrent-nox docker image
             org.opencontainers.image.url=https://github.com/qbittorrent/docker-qbittorrent-nox
             org.opencontainers.image.vendor=qBittorrent
             org.opencontainers.image.version=${{ env.QBT_VERSION }}
+          load: true
+          platforms: ${{ matrix.platform }}
           tags: |
-            qbittorrentofficial/qbittorrent-nox:latest-${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
-            ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
+            qbittorrentofficial/qbittorrent-nox:latest-${{ steps.set-variables.outputs.PLATFORM_NAME }}
+            ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
       - name: Test run
         run: |
           docker run \
             --entrypoint "/usr/bin/qbittorrent-nox" \
             --platform ${{ matrix.platform }} \
-            qbittorrentofficial/qbittorrent-nox:latest-${{ steps.set-platform-name.outputs.PLATFORM_NAME }} \
+            qbittorrentofficial/qbittorrent-nox:latest-${{ steps.set-variables.outputs.PLATFORM_NAME }} \
             --version
 
       # To run the image locally:
@@ -85,17 +92,17 @@ jobs:
       - name: Export image
         run: |
           docker tag \
-            qbittorrentofficial/qbittorrent-nox:latest-${{ steps.set-platform-name.outputs.PLATFORM_NAME }} \
+            qbittorrentofficial/qbittorrent-nox:latest-${{ steps.set-variables.outputs.PLATFORM_NAME }} \
             qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}
           docker save \
-            --output qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-platform-name.outputs.PLATFORM_NAME }} \
+            --output qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-variables.outputs.PLATFORM_NAME }} \
             qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
-          path: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
+          name: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
+          path: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -112,8 +119,8 @@ jobs:
 
       - name: Upload to registries
         run: |
-          docker push qbittorrentofficial/qbittorrent-nox:latest-${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
-          docker push ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-${{ steps.set-platform-name.outputs.PLATFORM_NAME }}
+          docker push qbittorrentofficial/qbittorrent-nox:latest-${{ steps.set-variables.outputs.PLATFORM_NAME }}
+          docker push ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
 
   upload:
