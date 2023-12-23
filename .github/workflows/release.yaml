@@ -55,8 +55,6 @@ jobs:
         with:
           build-args: |
             QBT_VERSION=${{ env.QBT_VERSION }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           labels: |
             org.opencontainers.image.authors=https://github.com/qbittorrent/qBittorrent/graphs/contributors
             org.opencontainers.image.base.name=docker.io/alpine:latest
