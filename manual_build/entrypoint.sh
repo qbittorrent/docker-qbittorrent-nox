@@ -28,9 +28,9 @@ if [ ! -f "$qbtConfigFile" ]; then
     mkdir -p "$(dirname $qbtConfigFile)"
     cat << EOF > "$qbtConfigFile"
 [BitTorrent]
-Session\DefaultSavePath=/downloads
+Session\DefaultSavePath=$downloadsPath
 Session\Port=6881
-Session\TempPath=/downloads/temp
+Session\TempPath=$downloadsPath/temp
 
 [LegalNotice]
 Accepted=false
@@ -57,8 +57,12 @@ fi
 
 # those are owned by root by default
 # don't change existing files owner in `$downloadsPath`
-chown qbtUser:qbtUser "$downloadsPath"
-chown qbtUser:qbtUser -R "$profilePath"
+if [ -d "$downloadsPath" ]; then
+    chown qbtUser:qbtUser "$downloadsPath"
+fi
+if [ -d "$profilePath" ]; then
+    chown qbtUser:qbtUser -R "$profilePath"
+fi
 
 # set umask just before starting qbt
 if [ -n "$UMASK" ]; then
