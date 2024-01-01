@@ -97,7 +97,7 @@ jobs:
             qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
           path: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
