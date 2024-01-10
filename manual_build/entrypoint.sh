@@ -2,7 +2,7 @@
 
 downloadsPath="/downloads"
 profilePath="/config"
-qbtConfigFile="$profilePath/qBittorrent/config/qBittorrent.conf"
+qbtConfigFile="$profilePath/config/qBittorrent.conf"
 
 if [ -n "$PUID" ]; then
     sed -i "s|^qbtUser:x:[0-9]*:|qbtUser:x:$PUID:|g" /etc/passwd
