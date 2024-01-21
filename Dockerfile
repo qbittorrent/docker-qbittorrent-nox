@@ -21,7 +21,7 @@ FROM base AS builder
 
 ARG QBT_VERSION
 ARG LIBBT_CMAKE_FLAGS=""
-ARG LIBBT_VERSION="1.2.19"
+ARG LIBBT_VERSION="2.0.9"
 
 # check environment variables
 RUN \
