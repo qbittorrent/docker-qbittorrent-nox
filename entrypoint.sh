@@ -4,11 +4,11 @@ downloadsPath="/downloads"
 profilePath="/config"
 qbtConfigFile="$profilePath/qBittorrent/config/qBittorrent.conf"
 
-if [ -n "$PUID" ]; then
+if [ -n "$PUID" ] && [ "$PUID" != "$(id -u qbtUser)" ]; then
     sed -i "s|^qbtUser:x:[0-9]*:|qbtUser:x:$PUID:|g" /etc/passwd
 fi
 
-if [ -n "$PGID" ]; then
+if [ -n "$PGID" ] && [ "$PGID" != "$(id -g qbtUser)" ]; then
     sed -i "s|^\(qbtUser:x:[0-9]*\):[0-9]*:|\1:$PGID:|g" /etc/passwd
     sed -i "s|^qbtUser:x:[0-9]*:|qbtUser:x:$PGID:|g" /etc/group
 fi
