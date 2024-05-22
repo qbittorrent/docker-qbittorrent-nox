@@ -10,6 +10,7 @@ Repository on GitHub: https://github.com/qbittorrent/docker-qbittorrent-nox
 * linux/arm/v6
 * linux/arm/v7
 * linux/arm64/v8
+* linux/riscv64
 
 ## Reporting bugs
 

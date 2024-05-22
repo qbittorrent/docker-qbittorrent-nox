@@ -26,6 +26,7 @@ jobs:
           - "linux/arm/v6"
           - "linux/arm/v7"
           - "linux/arm64/v8"
+          - "linux/riscv64"
 
     steps:
       - name: Checkout repository
@@ -148,28 +149,32 @@ jobs:
             --amend qbittorrentofficial/qbittorrent-nox:latest-linux-amd64 \
             --amend qbittorrentofficial/qbittorrent-nox:latest-linux-arm-v6 \
             --amend qbittorrentofficial/qbittorrent-nox:latest-linux-arm-v7 \
-            --amend qbittorrentofficial/qbittorrent-nox:latest-linux-arm64-v8
+            --amend qbittorrentofficial/qbittorrent-nox:latest-linux-arm64-v8 \
+            --amend qbittorrentofficial/qbittorrent-nox:latest-linux-riscv64
           docker manifest create \
             qbittorrentofficial/qbittorrent-nox:latest \
             --amend qbittorrentofficial/qbittorrent-nox:latest-linux-386 \
             --amend qbittorrentofficial/qbittorrent-nox:latest-linux-amd64 \
             --amend qbittorrentofficial/qbittorrent-nox:latest-linux-arm-v6 \
             --amend qbittorrentofficial/qbittorrent-nox:latest-linux-arm-v7 \
-            --amend qbittorrentofficial/qbittorrent-nox:latest-linux-arm64-v8
+            --amend qbittorrentofficial/qbittorrent-nox:latest-linux-arm64-v8 \
+            --amend qbittorrentofficial/qbittorrent-nox:latest-linux-riscv64
           docker manifest create \
             ghcr.io/qbittorrent/docker-qbittorrent-nox:${{ env.QBT_VERSION }}-${{ env.TAG_RELEASE_NUMBER }} \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-386 \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-amd64 \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm-v6 \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm-v7 \
-            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm64-v8
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm64-v8 \
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-riscv64
           docker manifest create \
             ghcr.io/qbittorrent/docker-qbittorrent-nox:latest \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-386 \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-amd64 \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm-v6 \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm-v7 \
-            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm64-v8
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm64-v8 \
+            --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-riscv64
 
       - name: Upload to registries
         run: |
