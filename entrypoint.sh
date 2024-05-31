@@ -4,16 +4,18 @@ downloadsPath="/downloads"
 profilePath="/config"
 qbtConfigFile="$profilePath/qBittorrent/config/qBittorrent.conf"
 
-if [ -n "$PUID" ] && [ "$PUID" != "$(id -u qbtUser)" ]; then
+ignorePermissions="${QBT_IGNORE_PERMISSIONS:-0}"
+
+if [ $ignorePermissions -eq 0 ] && [ -n "$PUID" ] && [ "$PUID" != "$(id -u qbtUser)" ]; then
     sed -i "s|^qbtUser:x:[0-9]*:|qbtUser:x:$PUID:|g" /etc/passwd
 fi
 
-if [ -n "$PGID" ] && [ "$PGID" != "$(id -g qbtUser)" ]; then
+if [ $ignorePermissions -eq 0 ] &&  [ -n "$PGID" ] && [ "$PGID" != "$(id -g qbtUser)" ]; then
     sed -i "s|^\(qbtUser:x:[0-9]*\):[0-9]*:|\1:$PGID:|g" /etc/passwd
     sed -i "s|^qbtUser:x:[0-9]*:|qbtUser:x:$PGID:|g" /etc/group
 fi
 
-if [ -n "$PAGID" ]; then
+if [ $ignorePermissions -eq 0 ] && [ -n "$PAGID" ]; then
     _origIFS="$IFS"
     IFS=','
     for AGID in $PAGID; do
@@ -57,10 +59,10 @@ fi
 
 # those are owned by root by default
 # don't change existing files owner in `$downloadsPath`
-if [ -d "$downloadsPath" ]; then
+if [ $ignorePermissions -eq 0 ] && [ -d "$downloadsPath" ]; then
     chown qbtUser:qbtUser "$downloadsPath"
 fi
-if [ -d "$profilePath" ]; then
+if [ $ignorePermissions -eq 0 ] && [ -d "$profilePath" ]; then
     chown qbtUser:qbtUser -R "$profilePath"
 fi
 
@@ -69,9 +71,16 @@ if [ -n "$UMASK" ]; then
     umask "$UMASK"
 fi
 
-exec \
-    doas -u qbtUser \
-        qbittorrent-nox \
-            --profile="$profilePath" \
-            --webui-port="$QBT_WEBUI_PORT" \
-            "$@"
+if [ $ignorePermissions -eq 0 ]; then
+    exec \
+        doas -u qbtUser \
+            qbittorrent-nox \
+                --profile="$profilePath" \
+                --webui-port="$QBT_WEBUI_PORT" \
+                "$@"
+else
+    exec qbittorrent-nox \
+                --profile="$profilePath" \
+                --webui-port="$QBT_WEBUI_PORT" \
+                "$@"
+fi

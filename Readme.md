@@ -57,6 +57,12 @@ https://github.com/qbittorrent/qBittorrent/issues
     * `QBT_WEBUI_PORT` \
       This environment variable sets the port number which qBittorrent WebUI will be binded to.
       Defaults to port `8080` if value is not set.
+    * `QBT_IGNORE_PERMISSIONS` \
+      This environment variable skips all the permission preflight checks and
+      doesn't try to do anything with the users. Set to `1` **only if you
+      understand what and why you're doing**. This allows qBittorrent-nox to run
+      in the environments where the user id is enforced outside of the
+      container.
 
     #### Volumes
 
