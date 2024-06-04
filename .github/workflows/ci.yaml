@@ -2,7 +2,9 @@ name: CI
 
 on: [pull_request, push]
 
-permissions: {}
+permissions:
+  attestations: write
+  id-token: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -84,3 +86,8 @@ jobs:
         with:
           name: qbittorrent-nox_devel_${{ steps.set-variables.outputs.PLATFORM_NAME }}
           path: qbittorrent-nox_devel_${{ steps.set-variables.outputs.PLATFORM_NAME }}
+
+      - name: Generate build provenace attestations
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: qbittorrent-nox_devel_${{ steps.set-variables.outputs.PLATFORM_NAME }}
