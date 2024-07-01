@@ -54,7 +54,7 @@ jobs:
               max-parallelism = 1
 
       - name: Build image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             QBT_VERSION=${{ env.QBT_VERSION }}
