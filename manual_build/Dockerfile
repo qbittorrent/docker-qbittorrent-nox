@@ -20,7 +20,7 @@ RUN \
 FROM base AS builder
 
 ARG QBT_VERSION
-ARG LIBBT_BRANCH="RC_1_2"
+ARG LIBBT_VERSION="RC_1_2"
 ARG LIBBT_CMAKE_FLAGS=""
 
 # check environment variables
@@ -55,7 +55,7 @@ ENV CFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -U_
 # build libtorrent
 RUN \
   git clone \
-    --branch "${LIBBT_BRANCH}" \
+    --branch "${LIBBT_VERSION}" \
     --depth 1 \
     --recurse-submodules \
     https://github.com/arvidn/libtorrent.git && \
