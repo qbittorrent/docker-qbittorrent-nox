@@ -42,7 +42,7 @@ jobs:
         with:
           build-args: |
             QBT_VERSION=devel
-            LIBBT_VERSION=devel
+            LIBBT_BRANCH=RC_2_0
             LIBBT_CMAKE_FLAGS=-Ddeprecated-functions=ON
           labels: |
             org.opencontainers.image.authors=https://github.com/qbittorrent/qBittorrent/graphs/contributors

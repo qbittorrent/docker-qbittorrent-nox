@@ -20,8 +20,8 @@ RUN \
 FROM base AS builder
 
 ARG QBT_VERSION
+ARG LIBBT_BRANCH="RC_1_2"
 ARG LIBBT_CMAKE_FLAGS=""
-ARG LIBBT_VERSION="1.2.19"
 
 # check environment variables
 RUN \
@@ -54,17 +54,12 @@ ENV CFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -U_
 
 # build libtorrent
 RUN \
-  if [ "${LIBBT_VERSION}" = "devel" ]; then \
-    git clone \
-      --depth 1 \
-      --recurse-submodules \
-      https://github.com/arvidn/libtorrent.git && \
-    cd libtorrent ; \
-  else \
-    wget "https://github.com/arvidn/libtorrent/releases/download/v${LIBBT_VERSION}/libtorrent-rasterbar-${LIBBT_VERSION}.tar.gz" && \
-    tar -xf "libtorrent-rasterbar-${LIBBT_VERSION}.tar.gz" && \
-    cd "libtorrent-rasterbar-${LIBBT_VERSION}" ; \
-  fi && \
+  git clone \
+    --branch "${LIBBT_BRANCH}" \
+    --depth 1 \
+    --recurse-submodules \
+    https://github.com/arvidn/libtorrent.git && \
+  cd libtorrent && \
   cmake \
     -B build \
     -G Ninja \
@@ -107,13 +102,9 @@ RUN \
 # record compile-time Software Bill of Materials (sbom)
 RUN \
   printf "Software Bill of Materials for building qbittorrent-nox\n\n" >> /sbom.txt && \
-  if [ "${LIBBT_VERSION}" = "devel" ]; then \
-    cd libtorrent && \
-    echo "libtorrent-rasterbar git $(git rev-parse HEAD)" >> /sbom.txt && \
-    cd .. ; \
-  else \
-    echo "libtorrent-rasterbar ${LIBBT_VERSION}" >> /sbom.txt ; \
-  fi && \
+  cd libtorrent && \
+  echo "libtorrent-rasterbar git $(git rev-parse HEAD)" >> /sbom.txt && \
+  cd .. && \
   if [ "${QBT_VERSION}" = "devel" ]; then \
     cd qBittorrent && \
     echo "qBittorrent git $(git rev-parse HEAD)" >> /sbom.txt && \
