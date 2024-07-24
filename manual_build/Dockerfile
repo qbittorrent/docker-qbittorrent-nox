@@ -60,6 +60,8 @@ RUN \
     --recurse-submodules \
     https://github.com/arvidn/libtorrent.git && \
   cd libtorrent && \
+  CFLAGS="$CFLAGS -std=c++20" \
+  CXXFLAGS="$CXXFLAGS -std=c++20" \
   cmake \
     -B build \
     -G Ninja \
