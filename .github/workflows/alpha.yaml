@@ -93,6 +93,21 @@ jobs:
         with:
           subject-path: qbittorrent-nox_alpha_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
+      - name: Delete alpha tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          response=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /orgs/qbittorrent/packages/container/docker-qbittorrent-nox/versions)
+          id=$(echo "$response" | jq 'map(select(.metadata.container.tags | . == ["alpha"]) | .id) | first')
+          gh api \
+            --method DELETE \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/orgs/qbittorrent/packages/container/docker-qbittorrent-nox/versions/$id" \
+            || true
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
