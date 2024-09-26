@@ -55,13 +55,18 @@ if [ -z "$QBT_WEBUI_PORT" ]; then
     QBT_WEBUI_PORT=8080
 fi
 
-# those are owned by root by default
-# don't change existing files owner in `$downloadsPath`
-if [ -d "$downloadsPath" ]; then
-    chown qbtUser:qbtUser "$downloadsPath"
-fi
-if [ -d "$profilePath" ]; then
-    chown qbtUser:qbtUser -R "$profilePath"
+if [ -d "$ROOTLESS" ] && [ "$ROOTLESS" == "true" ]; then
+    finalUser="root"
+else
+    finalUser="qbtUser"
+    # those are owned by root by default
+    # don't change existing files owner in `$downloadsPath`
+    if [ -d "$downloadsPath" ]; then
+        chown qbtUser:qbtUser "$downloadsPath"
+    fi
+    if [ -d "$profilePath" ]; then
+        chown qbtUser:qbtUser -R "$profilePath"
+    fi
 fi
 
 # set umask just before starting qbt
@@ -70,8 +75,8 @@ if [ -n "$UMASK" ]; then
 fi
 
 exec \
-    doas -u qbtUser \
-        qbittorrent-nox \
-            --profile="$profilePath" \
-            --webui-port="$QBT_WEBUI_PORT" \
-            "$@"
+    doas -u $finalUser \
+    qbittorrent-nox \
+    --profile="$profilePath" \
+    --webui-port="$QBT_WEBUI_PORT" \
+    "$@"
