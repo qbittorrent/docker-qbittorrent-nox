@@ -9,7 +9,7 @@ permissions:
   packages: write
 
 env:
-  QBT_VERSION: "5.0.0"
+  QBT_VERSION: "5.0.1"
 
   # This is a positive integer number that allows to differentiate between consecutive builds of the same qBittorrent version.
   # When `QBT_VERSION` is incremented, this value must reset to 1.
