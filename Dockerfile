@@ -7,6 +7,7 @@ RUN \
 # run-time dependencies
 RUN \
   apk --no-cache add \
+    7zip \
     bash \
     curl \
     doas \
