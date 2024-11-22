@@ -36,6 +36,9 @@ https://github.com/qbittorrent/qBittorrent/issues
 
 2. Edit Docker environment file
 
+    If you are using Docker Stack, refer to [docker-stack.yml](https://github.com/qbittorrent/docker-qbittorrent-nox/blob/main/docker-stack.yml) file as an example. \
+    It is an almost ready-to-use configuration yet a few variables are required to be filled in. Make sure you read the following steps as they largely share the same concept.
+
     If you are not using Docker Compose you can skip editing the environment file.
     However the variables presented below is crucial in later steps, make sure you understand them.
 
