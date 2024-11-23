@@ -34,6 +34,7 @@ Session\TempPath=$downloadsPath/temp
 EOF
 fi
 
+confirmLegalNotice=""
 _legalNotice=$(echo "$QBT_LEGAL_NOTICE" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
 if [ "$_legalNotice" = "confirm" ]; then
     confirmLegalNotice="--confirm-legal-notice"
