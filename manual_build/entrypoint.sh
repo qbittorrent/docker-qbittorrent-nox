@@ -31,24 +31,19 @@ if [ ! -f "$qbtConfigFile" ]; then
 Session\DefaultSavePath=$downloadsPath
 Session\Port=6881
 Session\TempPath=$downloadsPath/temp
-
-[LegalNotice]
-Accepted=false
 EOF
 fi
 
 _legalNotice=$(echo "$QBT_LEGAL_NOTICE" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
 if [ "$_legalNotice" = "confirm" ]; then
-    sed -i '/^\[LegalNotice\]$/{$!{N;s|\(\[LegalNotice\]\nAccepted=\).*|\1true|}}' "$qbtConfigFile"
+    confirmLegalNotice="--confirm-legal-notice"
 else
     # for backward compatibility
     # TODO: remove in next major version release
     _eula=$(echo "$QBT_EULA" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
     if [ "$_eula" = "accept" ]; then
-        sed -i '/^\[LegalNotice\]$/{$!{N;s|\(\[LegalNotice\]\nAccepted=\).*|\1true|}}' "$qbtConfigFile"
         echo "QBT_EULA=accept is deprecated and will be removed soon. The replacement is QBT_LEGAL_NOTICE=confirm"
-    else
-        sed -i '/^\[LegalNotice\]$/{$!{N;s|\(\[LegalNotice\]\nAccepted=\).*|\1false|}}' "$qbtConfigFile"
+        confirmLegalNotice="--confirm-legal-notice"
     fi
 fi
 
@@ -73,6 +68,7 @@ fi
 exec \
     doas -u qbtUser \
         qbittorrent-nox \
+            "$confirmLegalNotice" \
             --profile="$profilePath" \
             --webui-port="$QBT_WEBUI_PORT" \
             "$@"
