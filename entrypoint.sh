@@ -66,10 +66,19 @@ if [ -n "$UMASK" ]; then
     umask "$UMASK"
 fi
 
-exec \
-    doas -u qbtUser \
+if [ "$(id -u)" -eq 0 ]; then
+    exec \
+        doas -u qbtUser \
+            qbittorrent-nox \
+                "$confirmLegalNotice" \
+                --profile="$profilePath" \
+                --webui-port="$QBT_WEBUI_PORT" \
+                "$@"
+else
+    exec \
         qbittorrent-nox \
             "$confirmLegalNotice" \
             --profile="$profilePath" \
             --webui-port="$QBT_WEBUI_PORT" \
             "$@"
+fi
