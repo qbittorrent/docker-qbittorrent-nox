@@ -40,6 +40,7 @@ RUN \
     cmake \
     git \
     g++ \
+    make \
     ninja \
     openssl-dev \
     qt6-qtbase-dev \
