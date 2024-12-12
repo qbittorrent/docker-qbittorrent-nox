@@ -11,11 +11,14 @@ RUN \
     bash \
     curl \
     doas \
+    libcrypto3 \
+    libssl3 \
     python3 \
     qt6-qtbase \
     qt6-qtbase-sqlite \
     tini \
-    tzdata
+    tzdata \
+    zlib
 
 # image for building
 FROM base AS builder
@@ -46,7 +49,8 @@ RUN \
     ninja \
     openssl-dev \
     qt6-qtbase-dev \
-    qt6-qttools-dev
+    qt6-qttools-dev \
+    zlib-dev
 
 # compiler, linker options:
 # https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
