@@ -20,9 +20,12 @@ RUN \
 # image for building
 FROM base AS builder
 
-ARG QBT_VERSION
-ARG LIBBT_VERSION="RC_1_2"
-ARG LIBBT_CMAKE_FLAGS=""
+ARG QBT_VERSION \
+    BOOST_VERSION_MAJOR="1" \
+    BOOST_VERSION_MINOR="86" \
+    BOOST_VERSION_PATCH="0" \
+    LIBBT_VERSION="RC_1_2" \
+    LIBBT_CMAKE_FLAGS=""
 
 # check environment variables
 RUN \
@@ -36,7 +39,6 @@ RUN \
 # https://git.alpinelinux.org/aports/tree/community/qbittorrent/APKBUILD
 RUN \
   apk add \
-    boost-dev \
     cmake \
     git \
     g++ \
@@ -54,6 +56,12 @@ ENV CFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -U_
     CXXFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS" \
     LDFLAGS="-gz -Wl,-O1,--as-needed,--sort-common,-z,now,-z,pack-relative-relocs,-z,relro"
 
+# prepare boost
+RUN \
+  wget -O boost.tar.gz "https://archives.boost.io/release/$BOOST_VERSION_MAJOR.$BOOST_VERSION_MINOR.$BOOST_VERSION_PATCH/source/boost_${BOOST_VERSION_MAJOR}_${BOOST_VERSION_MINOR}_${BOOST_VERSION_PATCH}.tar.gz" && \
+  tar -xf boost.tar.gz && \
+  mv boost_* boost
+
 # build libtorrent
 RUN \
   git clone \
@@ -70,6 +78,7 @@ RUN \
     -DCMAKE_CXX_STANDARD=20 \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
+    -DBOOST_ROOT=/boost \
     -Ddeprecated-functions=OFF \
     $LIBBT_CMAKE_FLAGS && \
   cmake --build build -j $(nproc) && \
@@ -94,6 +103,7 @@ RUN \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
+    -DBOOST_ROOT=/boost \
     -DGUI=OFF && \
   cmake --build build -j $(nproc) && \
   cmake --install build
@@ -104,6 +114,7 @@ RUN \
 # record compile-time Software Bill of Materials (sbom)
 RUN \
   printf "Software Bill of Materials for building qbittorrent-nox\n\n" >> /sbom.txt && \
+  echo "boost $BOOST_VERSION_MAJOR.$BOOST_VERSION_MINOR.$BOOST_VERSION_PATCH" >> /sbom.txt && \
   cd libtorrent && \
   echo "libtorrent-rasterbar git $(git rev-parse HEAD)" >> /sbom.txt && \
   cd .. && \
