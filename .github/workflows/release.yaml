@@ -106,7 +106,7 @@ jobs:
           path: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
       - name: Generate build provenace attestations
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
