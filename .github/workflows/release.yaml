@@ -3,10 +3,7 @@ name: Release
 on:
   workflow_dispatch:  # trigger it manually
 
-permissions:
-  attestations: write
-  id-token: write
-  packages: write
+permissions: {}
 
 env:
   QBT_VERSION: "5.0.3"
@@ -19,6 +16,10 @@ jobs:
   build:
     name: Release - Build
     runs-on: ubuntu-latest
+    permissions:
+      attestations: write
+      id-token: write
+      packages: write
 
     strategy:
       matrix:

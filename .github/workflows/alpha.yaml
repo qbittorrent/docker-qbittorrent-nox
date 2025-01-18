@@ -5,15 +5,16 @@ on:
     - cron: '0 0 * * 0'
   workflow_dispatch:  # allow trigger it manually
 
-permissions:
-  attestations: write
-  id-token: write
-  packages: write
+permissions: {}
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      attestations: write
+      id-token: write
+      packages: write
 
     strategy:
       matrix:

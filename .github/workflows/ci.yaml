@@ -2,9 +2,7 @@ name: CI
 
 on: [pull_request, push]
 
-permissions:
-  attestations: write
-  id-token: write
+permissions: {}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -14,6 +12,10 @@ jobs:
   build:
     name: CI
     runs-on: ubuntu-latest
+    permissions:
+      attestations: write
+      id-token: write
+      security-events: write
 
     strategy:
       matrix:
