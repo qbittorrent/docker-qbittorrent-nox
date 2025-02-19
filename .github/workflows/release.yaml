@@ -135,6 +135,8 @@ jobs:
   upload:
     name: Release - Upload
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     needs: build
 
     steps:
