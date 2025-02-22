@@ -64,7 +64,10 @@ ENV CFLAGS="-pipe -fstack-clash-protection -fstack-protector-strong -fno-plt -U_
 RUN \
   wget -O boost.tar.gz "https://archives.boost.io/release/$BOOST_VERSION_MAJOR.$BOOST_VERSION_MINOR.$BOOST_VERSION_PATCH/source/boost_${BOOST_VERSION_MAJOR}_${BOOST_VERSION_MINOR}_${BOOST_VERSION_PATCH}.tar.gz" && \
   tar -xf boost.tar.gz && \
-  mv boost_* boost
+  mv boost_* boost && \
+  cd boost && \
+  ./bootstrap.sh && \
+  ./b2 stage --stagedir=./ --with-headers
 
 # build libtorrent
 RUN \
@@ -82,7 +85,7 @@ RUN \
     -DCMAKE_CXX_STANDARD=20 \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
-    -DBOOST_ROOT=/boost \
+    -DBOOST_ROOT=/boost/lib/cmake \
     -Ddeprecated-functions=OFF \
     $LIBBT_CMAKE_FLAGS && \
   cmake --build build -j $(nproc) && \
@@ -107,7 +110,7 @@ RUN \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
-    -DBOOST_ROOT=/boost \
+    -DBOOST_ROOT=/boost/lib/cmake \
     -DGUI=OFF && \
   cmake --build build -j $(nproc) && \
   cmake --install build
