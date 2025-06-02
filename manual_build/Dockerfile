@@ -49,6 +49,7 @@ RUN \
     ninja \
     openssl-dev \
     qt6-qtbase-dev \
+    qt6-qtbase-private-dev \
     qt6-qttools-dev \
     zlib-dev
 
