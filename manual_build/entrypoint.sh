@@ -38,25 +38,33 @@ if [ ! -f "$qbtConfigFile" ]; then
 Session\DefaultSavePath=$downloadsPath
 Session\Port=6881
 Session\TempPath=$downloadsPath/temp
+[Preferences]
+WebUI\Port=8080
 EOF
 fi
 
-confirmLegalNotice=""
+argLegalNotice=""
 _legalNotice=$(echo "$QBT_LEGAL_NOTICE" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
 if [ "$_legalNotice" = "confirm" ]; then
-    confirmLegalNotice="--confirm-legal-notice"
+    argLegalNotice="--confirm-legal-notice"
 else
     # for backward compatibility
     # TODO: remove in next major version release
     _eula=$(echo "$QBT_EULA" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
     if [ "$_eula" = "accept" ]; then
         echo "QBT_EULA=accept is deprecated and will be removed soon. The replacement is QBT_LEGAL_NOTICE=confirm"
-        confirmLegalNotice="--confirm-legal-notice"
+        argLegalNotice="--confirm-legal-notice"
     fi
 fi
 
-if [ -z "$QBT_WEBUI_PORT" ]; then
-    QBT_WEBUI_PORT=8080
+argTorrentingPort=""
+if [ -n "$QBT_TORRENTING_PORT" ]; then
+    argTorrentingPort="--torrenting-port=$QBT_TORRENTING_PORT"
+fi
+
+argWebUIPort=""
+if [ -n "$QBT_WEBUI_PORT" ]; then
+    argWebUIPort="--webui-port=$QBT_WEBUI_PORT"
 fi
 
 if [ "$isRoot" = "1" ]; then
@@ -79,15 +87,17 @@ if [ "$isRoot" = "1" ]; then
     exec \
         doas -u qbtUser \
             qbittorrent-nox \
-                "$confirmLegalNotice" \
+                "$argLegalNotice" \
                 --profile="$profilePath" \
-                --webui-port="$QBT_WEBUI_PORT" \
+                "$argTorrentingPort" \
+                "$argWebUIPort" \
                 "$@"
 else
     exec \
         qbittorrent-nox \
-            "$confirmLegalNotice" \
+            "$argLegalNotice" \
             --profile="$profilePath" \
-            --webui-port="$QBT_WEBUI_PORT" \
+            "$argTorrentingPort" \
+            "$argWebUIPort" \
             "$@"
 fi

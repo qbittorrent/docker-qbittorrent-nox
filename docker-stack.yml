@@ -10,6 +10,7 @@ services:
       #- PGID=1000
       #- PUID=1000
       - QBT_LEGAL_NOTICE=
+      - QBT_TORRENTING_PORT=6881
       - QBT_WEBUI_PORT=8080
       #- TZ=UTC
       #- UMASK=022
