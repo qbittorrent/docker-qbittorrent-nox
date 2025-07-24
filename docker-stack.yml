@@ -5,6 +5,9 @@ services:
     # for debugging
     #cap_add:
       #- SYS_PTRACE
+    # additional arguments to `qbittorrent-nox`
+    #command:
+      #- --help
     environment:
       #- PAGID=10000
       #- PGID=1000

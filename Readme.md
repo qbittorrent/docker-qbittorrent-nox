@@ -111,6 +111,8 @@ https://github.com/qbittorrent/qBittorrent/issues
     * A few notes:
       * Alternatively, you can use `ghcr.io/qbittorrent/docker-qbittorrent-nox:${QBT_VERSION}`
         for the image path.
+      * You can pass command-line arguments to `qbittorrent-nox` by appending them to the end of `docker run ...` command.
+        If using Docker Compose, modify the `command:` array in docker-compose.yml.
       * By default the timezone in the container uses the default of Alpine Linux (which is most likely `UTC`).
         You can set the environment variable `TZ` to your preferred value.
       * You can change the User ID (UID) and Group ID (GID) of the `qbittorrent-nox` process by setting

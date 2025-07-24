@@ -3,6 +3,9 @@ services:
     # for debugging
     #cap_add:
       #- SYS_PTRACE
+    # additional arguments to `qbittorrent-nox`
+    #command:
+      #- --help
     container_name: qbittorrent-nox
     environment:
       #- PAGID=10000
