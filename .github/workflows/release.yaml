@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
 
@@ -109,7 +109,7 @@ jobs:
           path: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
       - name: Generate build provenace attestations
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: qbittorrent-nox_${{ env.QBT_VERSION }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
