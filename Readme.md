@@ -158,7 +158,7 @@ Refer to [manual_build](https://github.com/qbittorrent/docker-qbittorrent-nox/tr
 
 ## Debugging
 
-To attach gdb to the running qbittorent-nox process, follow the steps below:
+To attach gdb to the running qbittorrent-nox process, follow the steps below:
 
 1. Before you start the container
    * Remove `--read-only` as it will need additional packages within the container. \
