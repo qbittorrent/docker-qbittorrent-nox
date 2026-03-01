@@ -126,7 +126,7 @@ jobs:
             qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '-lt2' || '' }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: qbittorrent-nox_${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '_lt2' || '' }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
           path: qbittorrent-nox_${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '_lt2' || '' }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
