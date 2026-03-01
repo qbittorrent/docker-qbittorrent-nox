@@ -93,7 +93,7 @@ jobs:
           path: qbittorrent-nox_devel-${{ steps.set-variables.outputs.GIT_HEAD_HASH }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
       - name: Generate build provenace attestations
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest@v4
         with:
           subject-path: qbittorrent-nox_devel-${{ steps.set-variables.outputs.GIT_HEAD_HASH }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 

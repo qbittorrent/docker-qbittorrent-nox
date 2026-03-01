@@ -132,7 +132,7 @@ jobs:
           path: qbittorrent-nox_${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '_lt2' || '' }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
       - name: Generate build provenace attestations
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest@v4
         with:
           subject-path: qbittorrent-nox_${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '_lt2' || '' }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
