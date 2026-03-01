@@ -89,7 +89,7 @@ jobs:
             qbittorrentofficial/qbittorrent-nox:alpha
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: qbittorrent-nox_alpha_${{ steps.set-variables.outputs.PLATFORM_NAME }}
           path: qbittorrent-nox_alpha_${{ steps.set-variables.outputs.PLATFORM_NAME }}
