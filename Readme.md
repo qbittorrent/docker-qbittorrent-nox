@@ -114,6 +114,9 @@ https://github.com/qbittorrent/qBittorrent/issues
         for the image path.
       * You can pass command-line arguments to `qbittorrent-nox` by appending them to the end of `docker run ...` command.
         If using Docker Compose, modify the `command:` array in docker-compose.yml.
+      * ⚠️ To ensure qbittorrent has enough time to shutdown properly, you must override the time to wait for the container to stop.
+        If unspecified, the default value is merely 10 seconds which is too short that it will interrupt the shutdown procedure and
+        led to corrupted files. Set `--stop-timeout 1800` (or `stop_grace_period: 30m` when using Docker Compose).
       * By default the timezone in the container uses the default of Alpine Linux (which is most likely `UTC`).
         You can set the environment variable `TZ` to your preferred value.
       * You can change the User ID (UID) and Group ID (GID) of the `qbittorrent-nox` process by setting
