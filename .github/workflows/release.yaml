@@ -179,7 +179,6 @@ jobs:
           password: ${{ github.token }}
 
       - name: Create multi-arch images
-        id: create_images
         run: |
           docker manifest create \
             qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}-${{ env.TAG_RELEASE_NUMBER }} \
@@ -229,13 +228,6 @@ jobs:
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm-v7 \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-arm64-v8 \
             --amend ghcr.io/qbittorrent/docker-qbittorrent-nox:latest-linux-riscv64
-          # exports
-          digest_latest=$(docker inspect qbittorrentofficial/qbittorrent-nox:latest \
-            | jq -r '.[0].Id')
-          echo "digest_latest=$digest_latest" >> "$GITHUB_OUTPUT"
-          digest_lt2=$(docker inspect qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}-lt2-${{ env.TAG_RELEASE_NUMBER }} \
-            | jq -r '.[0].Id')
-          echo "digest_lt2=$digest_lt2" >> "$GITHUB_OUTPUT"
 
       - name: Upload to registries
         run: |
@@ -247,11 +239,21 @@ jobs:
           docker manifest push ghcr.io/qbittorrent/docker-qbittorrent-nox:latest
           echo "::notice Remember to remove latest-* tags from Docker Hub!"
 
+      - name: Export digests
+        id: export_digests
+        run: |
+          digest_latest=$(docker inspect qbittorrentofficial/qbittorrent-nox:latest \
+            | jq -r '.[0].Id')
+          echo "digest_latest=$digest_latest" >> "$GITHUB_OUTPUT"
+          digest_lt2=$(docker inspect qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}-lt2-${{ env.TAG_RELEASE_NUMBER }} \
+            | jq -r '.[0].Id')
+          echo "digest_lt2=$digest_lt2" >> "$GITHUB_OUTPUT"
+
       - name: "Generate image attestation (Docker Hub, tag: latest)"
         uses: actions/attest@v4
         with:
           subject-name: docker.io/qbittorrentofficial/qbittorrent-nox
-          subject-digest: ${{ steps.create_images.outputs.digest_latest }}
+          subject-digest: ${{ steps.export_digests.outputs.digest_latest }}
           push-to-registry: true
           create-storage-record: true
 
@@ -259,7 +261,7 @@ jobs:
         uses: actions/attest@v4
         with:
           subject-name: docker.io/qbittorrentofficial/qbittorrent-nox
-          subject-digest: ${{ steps.create_images.outputs.digest_lt2 }}
+          subject-digest: ${{ steps.export_digests.outputs.digest_lt2 }}
           push-to-registry: true
           create-storage-record: false
 
@@ -267,7 +269,7 @@ jobs:
         uses: actions/attest@v4
         with:
           subject-name: ghcr.io/qbittorrent/docker-qbittorrent-nox
-          subject-digest: ${{ steps.create_images.outputs.digest_latest }}
+          subject-digest: ${{ steps.export_digests.outputs.digest_latest }}
           push-to-registry: true
           create-storage-record: false
 
@@ -275,6 +277,6 @@ jobs:
         uses: actions/attest@v4
         with:
           subject-name: ghcr.io/qbittorrent/docker-qbittorrent-nox
-          subject-digest: ${{ steps.create_images.outputs.digest_lt2 }}
+          subject-digest: ${{ steps.export_digests.outputs.digest_lt2 }}
           push-to-registry: true
           create-storage-record: false
