@@ -242,9 +242,11 @@ jobs:
       - name: Export digests
         id: export_digests
         run: |
+          docker pull qbittorrentofficial/qbittorrent-nox:latest
           digest_latest=$(docker inspect qbittorrentofficial/qbittorrent-nox:latest \
             | jq -r '.[0].Id')
           echo "digest_latest=$digest_latest" >> "$GITHUB_OUTPUT"
+          docker pull qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}-lt2-${{ env.TAG_RELEASE_NUMBER }}
           digest_lt2=$(docker inspect qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}-lt2-${{ env.TAG_RELEASE_NUMBER }} \
             | jq -r '.[0].Id')
           echo "digest_lt2=$digest_lt2" >> "$GITHUB_OUTPUT"
