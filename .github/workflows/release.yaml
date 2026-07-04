@@ -59,7 +59,7 @@ jobs:
         run: |
           echo "DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_OUTPUT
           echo "PLATFORM_NAME=${{ matrix.targets.platform }}" | sed 's|/|-|g' >> $GITHUB_OUTPUT
-          echo "RELEASE_BRANCH=${{ matrix.libtorrent.branch == 'RC_1_2' && 'latest' || 'lt2' }}" >> $GITHUB_OUTPUT
+          echo "RELEASE_BRANCH=${{ case(matrix.libtorrent.branch == 'RC_1_2', 'latest', 'lt2') }}" >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -83,7 +83,7 @@ jobs:
             BOOST_VERSION_MINOR=${{ matrix.libtorrent.boost.version_minor }}
             BOOST_VERSION_PATCH=${{ matrix.libtorrent.boost.version_patch }}
             LIBBT_VERSION=${{ matrix.libtorrent.branch }}
-            LIBBT_CMAKE_FLAGS=${{ matrix.libtorrent.branch == 'RC_1_2' && '' || '-Ddeprecated-functions=ON' }}
+            LIBBT_CMAKE_FLAGS=${{ case(matrix.libtorrent.branch == 'RC_1_2', '', '-Ddeprecated-functions=ON') }}
           labels: |
             org.opencontainers.image.authors=https://github.com/qbittorrent/qBittorrent/graphs/contributors
             org.opencontainers.image.base.name=docker.io/alpine:latest
@@ -91,13 +91,13 @@ jobs:
             org.opencontainers.image.documentation=https://github.com/qbittorrent/docker-qbittorrent-nox#qbittorrent-nox-docker-image-
             org.opencontainers.image.created=${{ steps.set-variables.outputs.DATE }}
             org.opencontainers.image.licenses=GPL-3.0+
-            org.opencontainers.image.ref.name=${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '-lt2' || '' }}-${{ env.TAG_RELEASE_NUMBER }}
+            org.opencontainers.image.ref.name=${{ env.QBT_VERSION }}${{ case(matrix.libtorrent.branch == 'RC_2_0', '-lt2', '') }}-${{ env.TAG_RELEASE_NUMBER }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.source=https://github.com/qbittorrent/docker-qbittorrent-nox
             org.opencontainers.image.title=qbittorrent-nox docker image
             org.opencontainers.image.url=https://github.com/qbittorrent/docker-qbittorrent-nox
             org.opencontainers.image.vendor=qBittorrent
-            org.opencontainers.image.version=${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '-lt2' || '' }}-${{ env.TAG_RELEASE_NUMBER }}
+            org.opencontainers.image.version=${{ env.QBT_VERSION }}${{ case(matrix.libtorrent.branch == 'RC_2_0', '-lt2', '') }}-${{ env.TAG_RELEASE_NUMBER }}
           load: true
           platforms: ${{ matrix.targets.platform }}
           tags: |
@@ -120,21 +120,21 @@ jobs:
         run: |
           docker tag \
             qbittorrentofficial/qbittorrent-nox:${{ steps.set-variables.outputs.RELEASE_BRANCH }}-${{ steps.set-variables.outputs.PLATFORM_NAME }} \
-            qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '-lt2' || '' }}
+            qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}${{ case(matrix.libtorrent.branch == 'RC_2_0', '-lt2', '') }}
           docker save \
-            --output qbittorrent-nox_${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '_lt2' || '' }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }} \
-            qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '-lt2' || '' }}
+            --output qbittorrent-nox_${{ env.QBT_VERSION }}${{ case(matrix.libtorrent.branch == 'RC_2_0', '_lt2', '') }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }} \
+            qbittorrentofficial/qbittorrent-nox:${{ env.QBT_VERSION }}${{ case(matrix.libtorrent.branch == 'RC_2_0', '-lt2', '') }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: qbittorrent-nox_${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '_lt2' || '' }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
-          path: qbittorrent-nox_${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '_lt2' || '' }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
+          name: qbittorrent-nox_${{ env.QBT_VERSION }}${{ case(matrix.libtorrent.branch == 'RC_2_0', '_lt2', '') }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
+          path: qbittorrent-nox_${{ env.QBT_VERSION }}${{ case(matrix.libtorrent.branch == 'RC_2_0', '_lt2', '') }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
       - name: Generate build provenace attestations
         uses: actions/attest@v4
         with:
-          subject-path: qbittorrent-nox_${{ env.QBT_VERSION }}${{ matrix.libtorrent.branch == 'RC_2_0' && '_lt2' || '' }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
+          subject-path: qbittorrent-nox_${{ env.QBT_VERSION }}${{ case(matrix.libtorrent.branch == 'RC_2_0', '_lt2', '') }}-${{ env.TAG_RELEASE_NUMBER }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
 
       - name: Login to Docker Hub
         uses: docker/login-action@v4
