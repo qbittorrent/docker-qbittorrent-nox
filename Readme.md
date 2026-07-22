@@ -64,6 +64,10 @@ https://github.com/qbittorrent/qBittorrent/issues
     * `QBT_WEBUI_PORT` \
       This environment variable defines the port number used for qBittorrent WebUI.
       Defaults to port `8080` if value is not set.
+    * `QBT_INTERFACE_IP` \
+      This environment variable defines the ip address of the interface you wish
+      to bind qbitorrent to. This is helpful if you know your container's ip address
+      at startup. Defaults to blank.
 
     #### Volumes
 
