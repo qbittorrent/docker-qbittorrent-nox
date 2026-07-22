@@ -36,6 +36,7 @@ if [ ! -f "$qbtConfigFile" ]; then
     cat << EOF > "$qbtConfigFile"
 [BitTorrent]
 Session\DefaultSavePath=$downloadsPath
+Session\Interface=lo
 Session\Port=6881
 Session\TempPath=$downloadsPath/temp
 Session\TempPathEnabled=true
@@ -44,6 +45,12 @@ MigrationVersion=9999
 [Preferences]
 WebUI\Port=8080
 EOF
+fi
+
+# Run each time as the interface can change in a container
+if [ -n "$QBT_INTERFACE_IP" ]; then
+    QBT_INTERFACE=$(ip -o addr show | awk -v ip="${QBT_INTERFACE_IP}" '{split($4, a, "/"); if (a[1] == ip) print $2}')
+    sed -i "s|^Session\\\\Interface=.*|Session\\\\Interface=${QBT_INTERFACE}|g" "$qbtConfigFile"
 fi
 
 argLegalNotice=""
