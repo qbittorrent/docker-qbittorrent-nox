@@ -41,8 +41,8 @@ Session\TempPath=$downloadsPath/temp
 Session\TempPathEnabled=true
 [Meta]
 MigrationVersion=9999
-[Preferences]
-WebUI\Port=8080
+[WebUI]
+Port=8080
 EOF
 fi
 
