@@ -67,7 +67,6 @@ They are set in the `docker run ...` command according to the following section.
 
 #### Volumes
 
-The following folders need to be defined by their full paths. Using a relative path will not work.
 * `QBT_CONFIG_PATH`: qBittorrent configuration folder.
 * `QBT_DOWNLOADS_PATH`: qBittorrent default download folder.
       
