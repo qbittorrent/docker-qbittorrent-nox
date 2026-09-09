@@ -12,189 +12,186 @@ Repository on GitHub: https://github.com/qbittorrent/docker-qbittorrent-nox
 * linux/arm64/v8
 * linux/riscv64
 
-## Reporting bugs
+## Reporting bugs and issues
 
-If the problem is related to Docker, please report it to this repository: \
+If the problem is related to the qBittorrent-nox Docker container, please report it to this repository: \
 https://github.com/qbittorrent/docker-qbittorrent-nox/issues
 
-If the problem is with qBittorrent, please report the issue to its main repository: \
+If the problem is related to qBittorrent itself, please report it to the main repository: \
 https://github.com/qbittorrent/qBittorrent/issues
+
+If you are unsure or want to ask a question, please open a discussion: https://github.com/qbittorrent/docker-qbittorrent-nox/discussions
 
 ## Usage
 
-0. Prerequisites
+### Prerequisites
 
-    In order to run this image you will need Docker installed: https://docs.docker.com/get-docker/
+In order to run this image you will need Docker installed: https://docs.docker.com/get-docker/
 
-    If you don't need the GUI, you can just install Docker Engine: https://docs.docker.com/engine/install/
+If you don't need the GUI, you can just install Docker Engine: https://docs.docker.com/engine/install/
 
-    It is also recommended to install Docker Compose as it can simplify the process significantly: https://docs.docker.com/compose/install/
+It is also recommended to install Docker Compose as it can simplify the process significantly: https://docs.docker.com/compose/install/
 
-1. Download this repository
+### Download this repository
 
-    You can either `git clone` this repository or download a .zip of it: https://github.com/qbittorrent/docker-qbittorrent-nox/archive/refs/heads/main.zip
+Either `git clone` this repository or [download it as a zip archive](https://github.com/qbittorrent/docker-qbittorrent-nox/archive/refs/heads/main.zip).
 
-2. Edit Docker environment file
+### Edit the Docker environment file
 
-    If you are using Docker Stack, refer to [docker-stack.yml](https://github.com/qbittorrent/docker-qbittorrent-nox/blob/main/docker-stack.yml) file as an example. \
-    It is an almost ready-to-use configuration, though a few variables need to be filled in. Make sure you read the following steps as they largely share the same concept.
+For Docker compose, open the `.env` file at the root of the repository and set the variables according to the following section.
 
-    If you are not using Docker Compose you can skip editing the environment file.
-    However, the variables presented below are crucial for later steps, make sure you understand them.
+For Docker Stack, refer to the [docker-stack.yml](https://github.com/qbittorrent/docker-qbittorrent-nox/blob/main/docker-stack.yml) file as an example. \
+It is an almost ready-to-use configuration, though a few variables need to be filled in according to the following section.
 
-    Find and open the `.env` file in the repository you cloned (or the .zip archive you downloaded). \
-    There are a few variables that you must take care of before you can run the image. \
-    You can find the meanings of these variables in the following section. Make sure you understand every one of them.
+For the Docker command-line, the environment file does not need to be edited.
+They are set in the `docker run ...` command according to the following section.
 
-    #### Environment variables
+#### Environment variables
 
-    * `QBT_LEGAL_NOTICE` \
-      This environment variable defines whether you have read the legal notice of qBittorrent. \
-      **Put `confirm` only if you have read the legal notice.** You can find
-      the legal notice [here](https://github.com/qbittorrent/qBittorrent/blob/56667e717b82c79433ecb8a5ff6cc2d7b315d773/src/app/main.cpp#L320-L323).
-    * `QBT_VERSION` \
-      This environment variable specifies the version of qBittorrent-nox to use. \
-      For example, `4.4.5-1` is a valid entry. You can find all tagged versions [here](https://hub.docker.com/r/qbittorrentofficial/qbittorrent-nox/tags). \
-      You can put `latest` to use the latest stable release of qBittorrent. \
-      If you are looking to test the bleeding-edge version, you can put `alpha` to get the weekly build. \
-      A `lt2` variation is available which uses libtorrent v2.0.x. However, users have reported memory/performance [issues](https://github.com/arvidn/libtorrent/issues/6667). Use at your own risk!
-    * `QBT_TORRENTING_PORT` \
-      This environment variable defines the port number used for torrenting traffic.
-      Defaults to port `6881` if value is not set.
-    * `QBT_WEBUI_PORT` \
-      This environment variable defines the port number used for qBittorrent WebUI.
-      Defaults to port `8080` if value is not set.
+* `QBT_LEGAL_NOTICE` \
+  Confirm that you have read [qBittorrent's legal notice](https://github.com/qbittorrent/qBittorrent/blob/56667e717b82c79433ecb8a5ff6cc2d7b315d773/src/app/main.cpp#L320-L323). \
+  **Put `confirm` only if you have read the legal notice!**
+  
+* `QBT_VERSION` \
+  The version of qBittorrent-nox to use. \
+  It can be a [tagged version](https://hub.docker.com/r/qbittorrentofficial/qbittorrent-nox/tags) (*e.g.* `4.4.5-1`), the latest stable version (`latest`) or the bleeding-edge weekly build (`alpha`).
+  A `lt2` variation which uses libtorrent v2.0.x is also available. [Users have reported memory and performance issues](https://github.com/arvidn/libtorrent/issues/6667) so use at your own risks!
+  
+* `QBT_TORRENTING_PORT` \
+  The port used for torrenting traffic.
+  Defaults to port `6881` if not set.
+  
+* `QBT_WEBUI_PORT` \
+  The port used for qBittorrent Web UI.
+  Defaults to port `8080` if not set.
 
-    #### Volumes
+#### Volumes
 
-    There are some paths involved:
-    * `<your_path>/config` \
-      Full path to a folder on your host machine which will store qBittorrent configurations.
-      Using a relative path will not work.
-    * `<your_path>/downloads` \
-      Full path to a folder on your host machine which will store the files downloaded by qBittorrent.
-      Using a relative path will not work.
+The following folders need to be defined by their full paths. Using a relative path will not work.
+* `QBT_CONFIG_PATH`: qBittorrent configuration folder.
+* `QBT_DOWNLOADS_PATH`: qBittorrent default download folder.
+      
+#### Other settings
 
-3. Running the image
+* The image value can be changed to `ghcr.io/qbittorrent/docker-qbittorrent-nox:${QBT_VERSION}` to use the GitHub registry which mirrors the same image.
 
-    * If using Docker (not Docker Compose), edit the variables and run:
-      ```shell
-      export \
-        QBT_LEGAL_NOTICE=<put_confirm_here> \
-        QBT_VERSION=latest \
-        QBT_TORRENTING_PORT=6881 \
-        QBT_WEBUI_PORT=8080 \
-        QBT_CONFIG_PATH="<your_path>/config" \
-        QBT_DOWNLOADS_PATH="<your_path>/downloads"
-      docker run \
-        -t \
-        --name qbittorrent-nox \
-        --read-only \
-        --rm \
-        --stop-timeout 1800 \
-        --tmpfs /tmp \
-        -e QBT_LEGAL_NOTICE \
-        -e QBT_TORRENTING_PORT \
-        -e QBT_WEBUI_PORT \
-        -p "$QBT_TORRENTING_PORT":"$QBT_TORRENTING_PORT"/tcp \
-        -p "$QBT_TORRENTING_PORT":"$QBT_TORRENTING_PORT"/udp \
-        -p "$QBT_WEBUI_PORT":"$QBT_WEBUI_PORT"/tcp \
-        -v "$QBT_CONFIG_PATH":/config \
-        -v "$QBT_DOWNLOADS_PATH":/downloads \
-        qbittorrentofficial/qbittorrent-nox:${QBT_VERSION}
-      ```
+* You can pass additional command-line arguments to `qbittorrent-nox` by appending them to the end of `docker run ...` command, or by adding them in the `command:` array of the [`docker-compose.yml`](https://github.com/qbittorrent/docker-qbittorrent-nox/blob/main/docker-compose.yml) file.
 
-    * If using Docker Compose:
-      ```shell
-      docker compose up
-      ```
+* The container's timezone uses Alpine Linux's default `UTC`. The `TZ` environment variable can be set to another value from the [tz database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
-    * A few notes:
-      * Alternatively, you can use `ghcr.io/qbittorrent/docker-qbittorrent-nox:${QBT_VERSION}`
-        for the image path.
-      * You can pass command-line arguments to `qbittorrent-nox` by appending them to the end of `docker run ...` command.
-        If using Docker Compose, modify the `command:` array in docker-compose.yml.
-      * ⚠️ To ensure qbittorrent has enough time to shutdown properly, you must override the time to wait for the container to stop.
-        If unspecified, the default value is merely 10 seconds which is too short that it will interrupt the shutdown procedure and
-        led to corrupted files. Set `--stop-timeout 1800` (or `stop_grace_period: 30m` when using Docker Compose).
-      * By default the timezone in the container uses the default of Alpine Linux (which is most likely `UTC`).
-        You can set the environment variable `TZ` to your preferred value.
-      * You can change the User ID (UID) and Group ID (GID) of the `qbittorrent-nox` process by setting
-        environment variables `PUID` and `PGID` respectively. By default they are both set to `1000`. \
-        Note that:
-        1. You will need to remove `--read-only` flag (when using Docker) or set
-        `read_only: false` (when using Docker Compose) as these settings are incompatible with each other.
-        2. This setting has no effect when running the image in rootless mode.
-      * You can set additional group ID (AGID) of the `qbittorrent-nox` process by setting the
-        environment variable `PAGID`. For example: `10000,10001`, this will set the process to be in
-        two (secondary) groups `10000` and `10001`. By default there is no additional group. \
-        Note that:
-        1. You will need to remove `--read-only` flag (when using Docker) or set
-        `read_only: false` (when using Docker Compose) as they are incompatible with it.
-        2. This setting has no effect when running the image in rootless mode.
-      * It is possible to set the umask of the `qbittorrent-nox` process by setting the
-        environment variable `UMASK`. By default it uses the default from Alpine Linux.
-      * You can list the compile-time Software Bill of Materials (sbom) with the following command:
-        ```shell
-        docker run --entrypoint /bin/cat --rm qbittorrentofficial/qbittorrent-nox:latest /sbom.txt
-        ```
+> [!WARNING]
+> Docker's default grace period before forcefully shutting down a container is too short for qBittorrent-nox to exit properly.
+> This can lead to corrupted files and errors when restarting the container afterwards because of orphaned lock files.
+> It is recommended to set `--stop-timeout 1800` or `stop_grace_period: 30m` to override the default 10s and ensure a clean stop.
 
-    * Then you can login to qBittorrent-nox at: `http://<your_docker_host_address>:8080`
-      * For older qBittorrent versions (< 4.6.1), the default username/password is: `admin/adminadmin`.
-      * For newer qBittorrent versions (≥ 4.6.1), qBittorrent will generate a temporary password and print it to the console (via stdout).
-        You need to use it to login. See the [announcement](https://www.qbittorrent.org/news#mon-nov-20th-2023---qbittorrent-v4.6.1-release). \
-        If you don't have a console attached, you can run `docker logs qbittorrent-nox` to show the logs.
+#### Running as a non-root user
 
-      After logging in, don't forget to change the password to something else! \
-      To change it in WebUI: 'Tools' menu -> 'Options...' -> 'Web UI' tab -> 'Authentication'
+The User ID (UID), Group ID (GID) of the `qbittorrent-nox` process can be changed by two means:
 
-4. Stopping container
+* Creating the container in rootless mode with `--user <uid>:<gid>` or `user: <uid>:<gid>`.
+* Setting the `PUID`, `PGID` and `PAGID` environment variables. By default `PUID` and `PGID` are both set to `1000`. An optional additional group ID (AGID) can also be set by using the `PAGID` environment variable. It is empty by default and accepts several additional groups (*e.g.* `10000,10001`). These environment variables are ignored if the container is already running in rootless mode.
 
-    * When using Docker (not Docker Compose):
-      ```shell
-      docker stop qbittorrent-nox
-      ```
+> [!NOTE]
+> User change is incompatible with the read-only option. You will need to remove the `--read-only` flag or set `read_only: false`.
 
-    * When using Docker Compose:
-      ```shell
-      docker compose down
-      ```
+Setting the `UMASK` will change the umask of the `qbittorrent-nox` process. Its default is the same as Alpine Linux's.
 
-## Build image manually
+### Running the image
+
+* Docker command-line, edit the variables and run:
+  ```shell
+  export \
+    QBT_LEGAL_NOTICE=<put_confirm_here> \
+    QBT_VERSION=latest \
+    QBT_TORRENTING_PORT=6881 \
+    QBT_WEBUI_PORT=8080 \
+    QBT_CONFIG_PATH="<your_path>/config" \
+    QBT_DOWNLOADS_PATH="<your_path>/downloads"
+  docker run \
+    -t \
+    --name qbittorrent-nox \
+    --read-only \
+    --rm \
+    --stop-timeout 1800 \
+    --tmpfs /tmp \
+    -e QBT_LEGAL_NOTICE \
+    -e QBT_TORRENTING_PORT \
+    -e QBT_WEBUI_PORT \
+    -p "$QBT_TORRENTING_PORT":"$QBT_TORRENTING_PORT"/tcp \
+    -p "$QBT_TORRENTING_PORT":"$QBT_TORRENTING_PORT"/udp \
+    -p "$QBT_WEBUI_PORT":"$QBT_WEBUI_PORT"/tcp \
+    -v "$QBT_CONFIG_PATH":/config \
+    -v "$QBT_DOWNLOADS_PATH":/downloads \
+    qbittorrentofficial/qbittorrent-nox:${QBT_VERSION}
+  ```
+
+* Docker Compose, in the repository folder run:
+  ```shell
+  docker compose up
+  ```
+
+#### Logging into the web UI
+
+When the container is running, you can log into qBittorrent-nox at `http://<your_docker_host_address>:8080` using the username `admin` and the temporary password that qBittorrent-nox generates and prints in the console and the logs via stdout. If you don't have a console attached, run `docker logs qbittorrent-nox` to show the logs.
+
+Older versions ([pre 4.6.1](https://www.qbittorrent.org/news#mon-nov-20th-2023---qbittorrent-v4.6.1-release)) use `adminadmin` as the default password.
+
+> [!NOTE]
+> Don't forget to change your admin password after logging in!
+> In the Web UI: 'Tools' menu -> 'Options…' -> 'Web UI' tab -> 'Authentication'
+
+4. Stopping the container
+
+* Docker command-line:
+  ```shell
+  docker stop qbittorrent-nox
+  ```
+
+* Docker Compose:
+  ```shell
+  docker compose down
+  ```
+
+## Manually building the image
 
 Refer to [manual_build](https://github.com/qbittorrent/docker-qbittorrent-nox/tree/main/manual_build) folder.
 
+## SBOM
+
+The compile-time Software Bill of Materials (SBOM) is accessible by the following command:
+```shell
+docker run --entrypoint /bin/cat --rm qbittorrentofficial/qbittorrent-nox:latest /sbom.txt
+```
+
 ## Debugging
 
-To attach gdb to the running qbittorrent-nox process, follow the steps below:
+To attach the GNU Debugger (GDB) to qBittorrent-nox, follow these instructions:
 
-1. Before you start the container
-   * Remove `--read-only` as it will need additional packages within the container. \
-     Or disable the respective attributes in docker-compose.yml.
-   * Add `--cap-add=SYS_PTRACE` to `docker run` argument list. \
-     Or enable the respective attributes in docker-compose.yml.
+1. Before starting the container
+   * Remove `--read-only` or set `read_only: false` to allow the installation of additional packages within the container.
+   * Add `--cap-add=SYS_PTRACE` or set `cap_add: - SYS_PTRACE`.
 
 2. Start the container
 
 3. Drop into container
    ```shell
-   # to find container id
+   # Find the container ID
    docker ps
-   # drop into container
+   # Open an interactive shell in the container
    docker exec -it <container_id> /bin/sh
    ```
 
-4. Install packages
+4. Install the debugging packages
    ```shell
    apk add \
      gdb \
      musl-dbg
    ```
 
-5. Attach gdb to the running process
+5. Attach GDB to the running process
    ```shell
-   # to find PID of qbittorrent-nox
+   # Find the PID of qbittorrent-nox
    ps -a
-   # attach debugger
+   # Attach the debugger to the process
    gdb -p <PID>
    ```

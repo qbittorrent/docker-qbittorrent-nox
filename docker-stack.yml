@@ -24,7 +24,7 @@ services:
       - 6881:6881/udp
       # for WebUI
       - 8080:8080/tcp
-    read_only: true
+    read_only: true # remove if using PAGID, PGID, PUID
     stop_grace_period: 30m
     tmpfs:
       - /tmp
