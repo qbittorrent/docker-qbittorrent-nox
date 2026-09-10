@@ -9,6 +9,7 @@ services:
       #- --help
     container_name: qbittorrent-nox
     environment:
+      # setting the *ID variables are incompatible with `read_only: true`
       #- PAGID=10000
       #- PGID=1000
       #- PUID=1000

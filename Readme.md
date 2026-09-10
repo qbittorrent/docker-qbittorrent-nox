@@ -112,26 +112,27 @@ You can find the meanings of these variables in the following section. Make sure
 * The `image` value can be changed to `ghcr.io/qbittorrent/docker-qbittorrent-nox:${QBT_VERSION}` to use the GitHub mirror.
 * To pass additional command-line arguments to `qbittorrent-nox`, append them to the end of the `docker run ...` command.
   If using Docker Compose, modify the `command:` array in [docker-compose.yml][docker-compose-yml-link].
-* ⚠️ To ensure qbittorrent has enough time to shut down properly, you must override the time to wait for the container to stop.
-  If unspecified, the default value is merely 10 seconds which is too short and can interrupt the shutdown procedure and
-  lead to corrupted files. Set `--stop-timeout 1800` (or `stop_grace_period: 30m` when using Docker Compose).
-* The timezone in the container uses the default of Alpine Linux, which is most likely `UTC`.
-  You can set the environment variable `TZ` to your preferred value.
-* To change the User ID (UID) and Group ID (GID) of the `qbittorrent-nox` process, set
-  environment variables `PUID` and `PGID` respectively. By default they are both set to `1000`. \
-  Note that:
-  1. You will need to remove the `--read-only` flag (when using Docker) or set
-  `read_only: false` (when using Docker Compose) as these settings are incompatible.
-  2. This setting has no effect when running the image in rootless mode.
-* To set additional group ID (AGID) of the `qbittorrent-nox` process, set the
-  environment variable `PAGID`. For example: `10000,10001`, this will set the process to be in
-  two (secondary) groups `10000` and `10001`. By default there is no additional group. \
-  Note that:
-  1. You will need to remove the `--read-only` flag (when using Docker) or set
-  `read_only: false` (when using Docker Compose) as these settings are incompatible.
-  2. This setting has no effect when running the image in rootless mode.
-* To set the umask of the `qbittorrent-nox` process, set the environment variable `UMASK`.
-  By default it uses the default from Alpine Linux.
+* ⚠️ To ensure qBittorrent has enough time to shut down properly, you must override the container's stop timeout. \
+  If unspecified, the default value is only 10 seconds, which is too short and can interrupt the shutdown procedure,
+  leading to corrupted files. \
+  Set `--stop-timeout 1800` (or `stop_grace_period: 30m` when using Docker Compose).
+* To change the timezone in the container, set the `TZ` environment variable to your preferred value. \
+  The default is inherited from Alpine Linux, which is most likely `UTC`.
+* To change the User ID (UID) and Group ID (GID) of the `qbittorrent-nox` process, set the
+  environment variables `PUID` and `PGID` respectively. \
+  The default is `1000` for both.
+  * 📢 You will need to remove the `--read-only` flag (when using Docker) or set
+    `read_only: false` (when using Docker Compose), as these settings are incompatible.
+  * These environment variables have no effect when running the image in rootless mode.
+* To set additional group IDs (AGID) for the `qbittorrent-nox` process, set the
+  environment variable `PAGID`. For example: `10000,10001`. This will set the process to be in
+  two (secondary) groups, `10000` and `10001`. \
+  By default, there are no additional groups.
+  * 📢 You will need to remove the `--read-only` flag (when using Docker) or set
+    `read_only: false` (when using Docker Compose), as these settings are incompatible.
+  * This environment variable has no effect when running the image in rootless mode.
+* To set the umask of the `qbittorrent-nox` process, set the environment variable `UMASK`. \
+  The default is inherited from Alpine Linux.
 * To list the compile-time Software Bill of Materials (SBOM), run:
 
   ```shell
@@ -140,10 +141,15 @@ You can find the meanings of these variables in the following section. Make sure
 
 #### Log in to qBittorrent-nox at: `http://<your_docker_host_address>:8080`
 
-* For older qBittorrent versions (< 4.6.1), the default username/password is: `admin/adminadmin`.
 * For newer qBittorrent versions (≥ 4.6.1), qBittorrent will generate a temporary password and print it to the console (via stdout).
-  You need to use it to log in. See the [announcement](https://www.qbittorrent.org/news#mon-nov-20th-2023---qbittorrent-v4.6.1-release). \
-  If you don't have a console attached, you can run `docker logs qbittorrent-nox` to show the logs.
+  You will need to use this password to log in. See the [announcement](https://www.qbittorrent.org/news#mon-nov-20th-2023---qbittorrent-v4.6.1-release). \
+  If you don't have a console attached, you can run the following to view the logs:
+
+  ```shell
+  docker logs qbittorrent-nox
+  ```
+
+* For older qBittorrent versions (< 4.6.1), the default username/password is: `admin/adminadmin`.
 
 > [!IMPORTANT]
 > Don't forget to change your password after logging in! \
