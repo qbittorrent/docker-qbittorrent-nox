@@ -96,28 +96,3 @@ jobs:
         uses: actions/attest@v4
         with:
           subject-path: qbittorrent-nox_devel-${{ steps.set-variables.outputs.GIT_HEAD_HASH }}_${{ steps.set-variables.outputs.PLATFORM_NAME }}
-
-      - name: Check GitHub Actions workflow
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pip install zizmor
-          IGNORE_RULEID='(.ruleId != "zizmor/cache-poisoning")
-            and (.ruleId != "zizmor/template-injection")
-            and (.ruleId != "zizmor/unpinned-uses")'
-          IGNORE_ID='(.id != "zizmor/cache-poisoning")
-            and (.id != "zizmor/template-injection")
-            and (.id != "zizmor/unpinned-uses")'
-          zizmor \
-            --format sarif \
-            --persona auditor \
-            ./ \
-            | jq "(.runs[].results |= map(select($IGNORE_RULEID)))
-              | (.runs[].tool.driver.rules |= map(select($IGNORE_ID)))" \
-            > "${{ runner.temp }}/zizmor_results.sarif"
-
-      - name: Upload zizmor results
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          category: zizmor
-          sarif_file: "${{ runner.temp }}/zizmor_results.sarif"

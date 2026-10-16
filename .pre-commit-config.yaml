@@ -1,0 +1,40 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: v6.0.0
+    hooks:
+    - id: fix-byte-order-marker
+      name: Check file encoding (UTF-8 without BOM)
+
+    - id: check-yaml
+      name: Check YAML files
+
+    - id: mixed-line-ending
+      name: Check line ending character (LF)
+      args: ["--fix=lf"]
+
+    - id: end-of-file-fixer
+      name: Check trailing newlines
+
+    - id: trailing-whitespace
+      name: Check trailing whitespaces
+
+  - repo: https://github.com/rvben/rumdl-pre-commit.git
+    rev: v0.2.77
+    hooks:
+    - id: rumdl
+      name: Check Markdown files
+      args: ["--config", ".github/workflows/helpers/pre-commit/.rumdl.toml", "--fix"]
+
+  - repo: https://github.com/codespell-project/codespell.git
+    rev: v2.4.3
+    hooks:
+    - id: codespell
+      name: Check spelling (codespell)
+      args: ["--ignore-words-list", ""]
+
+  - repo: https://github.com/crate-ci/typos.git
+    rev: v1.50.3
+    hooks:
+    - id: typos
+      name: Check spelling (typos)
+      args: ["--config", ".github/workflows/helpers/pre-commit/.typos.toml"]
