@@ -1,3 +1,5 @@
+# https://docs.docker.com/reference/compose-file
+
 services:
   qbittorrent-nox:
     # for debugging
@@ -18,6 +20,14 @@ services:
       - QBT_WEBUI_PORT=${QBT_WEBUI_PORT}
       #- TZ=UTC
       #- UMASK=022
+    # stub provided for customization; this rarely works out-of-the-box
+    #healthcheck:
+      #test: curl --fail --head --show-error --silent --output /dev/null http://127.0.0.1:${QBT_WEBUI_PORT} || exit 1
+      #interval: 1m
+      #timeout: 10s
+      #retries: 3
+      #start_period: 1m
+      #start_interval: 20s
     image: qbittorrentofficial/qbittorrent-nox:${QBT_VERSION}
     ports:
       # for bittorrent traffic
