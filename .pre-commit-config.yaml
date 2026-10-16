@@ -5,12 +5,12 @@ repos:
     - id: fix-byte-order-marker
       name: Check file encoding (UTF-8 without BOM)
 
-    - id: check-yaml
-      name: Check YAML files
-
     - id: mixed-line-ending
       name: Check line ending character (LF)
       args: ["--fix=lf"]
+
+    - id: check-yaml
+      name: Check YAML files
 
     - id: end-of-file-fixer
       name: Check trailing newlines
