@@ -54,7 +54,7 @@ You can find the meanings of these variables in the following section. Make sure
 * `QBT_VERSION` \
   The version of qBittorrent-nox to use. \
   It can be the latest stable version: `latest`, a [tagged version](https://hub.docker.com/r/qbittorrentofficial/qbittorrent-nox/tags): `4.4.5-1` or the bleeding-edge weekly build: `alpha`. \
-  An `lt2` variation which uses libtorrent v2.0.x is also available. However, users have reported [memory and performance issues](https://github.com/arvidn/libtorrent/issues/6667) so use at your own risk!
+  An `lt1` variation that uses libtorrent v1.2.x is also available. If you are a heavy seeder, you may want to choose this variation for [better seeding performance](https://github.com/arvidn/libtorrent/issues/9004#issuecomment-6239165752).
 * `QBT_TORRENTING_PORT` \
   The port number for torrenting traffic. \
   Defaults to port `6881` if value is not set.

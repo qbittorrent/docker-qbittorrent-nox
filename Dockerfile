@@ -25,9 +25,9 @@ FROM base AS builder
 
 ARG QBT_VERSION \
     BOOST_VERSION_MAJOR="1" \
-    BOOST_VERSION_MINOR="86" \
+    BOOST_VERSION_MINOR="92" \
     BOOST_VERSION_PATCH="0" \
-    LIBBT_VERSION="RC_1_2" \
+    LIBBT_VERSION="RC_2_1" \
     LIBBT_CMAKE_FLAGS=""
 
 # check environment variables

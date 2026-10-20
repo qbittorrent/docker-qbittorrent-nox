@@ -46,10 +46,9 @@ jobs:
           build-args: |
             QBT_VERSION=devel
             BOOST_VERSION_MAJOR=1
-            BOOST_VERSION_MINOR=91
+            BOOST_VERSION_MINOR=92
             BOOST_VERSION_PATCH=0
             LIBBT_VERSION=RC_2_1
-            "LIBBT_CMAKE_FLAGS=-Ddeprecated-functions=ON -Dwebtorrent=ON"
           labels: |
             org.opencontainers.image.authors=https://github.com/qbittorrent/qBittorrent/graphs/contributors
             org.opencontainers.image.base.name=docker.io/alpine:latest
