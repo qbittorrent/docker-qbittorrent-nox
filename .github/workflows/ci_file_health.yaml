@@ -32,7 +32,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pip install zizmor
+          pip install \
+            --uploaded-prior-to P3D \
+            zizmor
           IGNORE_RULEID='(.ruleId != "zizmor/cache-poisoning")
             and (.ruleId != "zizmor/template-injection")
             and (.ruleId != "zizmor/unpinned-uses")'
