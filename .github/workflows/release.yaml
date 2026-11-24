@@ -29,13 +29,13 @@ jobs:
           - platform: "linux/amd64"
             runs-on: ubuntu-latest
           - platform: "linux/arm/v6"
-            runs-on: ubuntu-24.04-arm
+            runs-on: ubuntu-26.04-arm
           - platform: "linux/arm/v7"
-            runs-on: ubuntu-24.04-arm
+            runs-on: ubuntu-26.04-arm
           - platform: "linux/arm64/v8"
-            runs-on: ubuntu-24.04-arm
+            runs-on: ubuntu-26.04-arm
           - platform: "linux/riscv64"
-            runs-on: ubuntu-24.04-arm
+            runs-on: ubuntu-26.04-arm
         libtorrent:
           - branch: "RC_1_2"
             boost:
